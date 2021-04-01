@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 /** Class that controls dictionaries, game field, both users and provides main game loop */
@@ -17,7 +16,7 @@ public class Game {
     /** game field with cells */
     private final GameField _field;
     /** all dictionaries, added to current game */
-    private final ArrayList<Dictionary> _dictionaries;
+    private final Dictionary _dictionary;
     /** first player */
     private final Player _firstPlayer;
     /** second player */
@@ -26,18 +25,18 @@ public class Game {
     /** Constructor
      *
      * @param fieldSize size of game field
-     * @param dictionaries all dictionaries that will be used in current game
+     * @param dictionary all dictionaries that will be used in current game
      * @param first first player
      * @param second second player
      */
-    public Game(int fieldSize, ArrayList<Dictionary> dictionaries, Player first, Player second) {
-        _dictionaries = Objects.requireNonNull(dictionaries);
+    public Game(int fieldSize, Dictionary dictionary, Player first, Player second) {
+        _dictionary = Objects.requireNonNull(dictionary);
         _firstPlayer = Objects.requireNonNull(first);
         _firstPlayer.setGame(this);
         _firstPlayer.setActive(true);
         _secondPlayer = Objects.requireNonNull(second);
         _secondPlayer.setGame(this);
-        _field = new GameField(_dictionaries.get(0).getRandomWord(fieldSize));
+        _field = new GameField(_dictionary.getRandomWord(fieldSize));
     }
 
     /** Get game field
@@ -50,7 +49,7 @@ public class Game {
      *
      * @return list of dictionaries
      */
-    public ArrayList<Dictionary> dictionaries() { return _dictionaries; }
+    public Dictionary dictionary() { return _dictionary; }
 
     /** Get first player
      *
@@ -89,19 +88,16 @@ public class Game {
         String word = _field.getSelectedWord();
         if (word == null) return WordCheckStatus.CURRENT_LETTER_DOES_NOT_SELECTED;
 
-        ArrayList<String> discoveredWords = new ArrayList<>(_firstPlayer.getWords());
-        discoveredWords.addAll(_secondPlayer.getWords());
-        if (discoveredWords.contains(word)) return WordCheckStatus.WORD_HAD_DISCOVERED_EARLIER;
+        if (_firstPlayer.getWords().contains(word) || _secondPlayer.getWords().contains(word))
+            return WordCheckStatus.WORD_HAD_DISCOVERED_EARLIER;
 
-        boolean isInDictionaries;
-        for (Dictionary dict : _dictionaries) {
-            isInDictionaries = dict.hasWord(word);
-            if (isInDictionaries) {
-                this.activePlayer().addWord(word);
-                this.nextPlayer();
-                return WordCheckStatus.SUCCESS;
-            }
+        if (_dictionary.hasWord(word)) {
+            this.activePlayer().addWord(word);
+            _field.prepareToNextMove();
+            this.nextPlayer();
+            return WordCheckStatus.SUCCESS;
         }
+
         return WordCheckStatus.WORD_DOES_NOT_EXIST;
     }
 

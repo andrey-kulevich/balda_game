@@ -1,7 +1,6 @@
 package model;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Objects;
 
 /** Builder of Game object */
@@ -14,7 +13,7 @@ public class GameBuilder {
     /** second player */
     private Player _secondPlayer;
     /** allowed dictionaries */
-    private final ArrayList<Dictionary> _dictionaries = new ArrayList<>();
+    private final Dictionary _dictionary = new Dictionary();
 
     /** Set size of the game field
      *
@@ -39,7 +38,7 @@ public class GameBuilder {
 
     /** add dictionary to game */
     public void addDictionary(String filename) throws FileNotFoundException {
-        _dictionaries.add(new Dictionary(Objects.requireNonNull(filename)));
+        _dictionary.load(Objects.requireNonNull(filename));
     }
 
     /** Create game with followed parameters
@@ -47,6 +46,6 @@ public class GameBuilder {
      * @return game
      */
     public Game initGame() {
-        return new Game(_fieldSize, _dictionaries, _firstPlayer, _secondPlayer);
+        return new Game(_fieldSize, _dictionary, _firstPlayer, _secondPlayer);
     }
 }

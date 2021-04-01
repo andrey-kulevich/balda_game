@@ -1,26 +1,119 @@
+import model.Dictionary;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class DictionaryTest {
-    // invalid filename
 
-    // empty file
+    Dictionary _dict;
 
-    // one line in file
+    void cleanUp() { _dict = new Dictionary(); }
 
-    // invalid format of file
+    @Test
+    void fileNotFound() {
+        cleanUp();
+        boolean isError = false;
+        try {
+            _dict.load("alalalal.txt");
+        } catch (FileNotFoundException e) {
+            isError = true;
+        }
+        Assertions.assertTrue(isError);
+    }
 
-    // dict has such word
+    @Test
+    void invalidFormatOfFile() {
+        cleanUp();
+        boolean isError = false;
+        try {
+            _dict.load("../alalalal.json");
+        } catch (IllegalArgumentException | FileNotFoundException e) {
+            isError = true;
+        }
+        Assertions.assertTrue(isError);
+    }
 
-    // dict has not such word
+    @Test
+    void getDefinitionOfWord() {
+        cleanUp();
+        try {
+            _dict.load("./dictionaries/customDictionary.txt");
+        } catch (FileNotFoundException ignored) { }
+        Assertions.assertEquals("блабла", _dict.getDefinition("чикипуки"));
+    }
 
-    // get definition of word
+    @Test
+    void checkIfSuchWordIsExist() {
+        cleanUp();
+        try {
+            _dict.load("./dictionaries/customDictionary.txt");
+        } catch (FileNotFoundException ignored) { }
+        Assertions.assertTrue(_dict.hasWord("чикипуки"));
+    }
 
-    // get random word
+    @Test
+    void dictHasNotSuchWord() {
+        cleanUp();
+        try {
+            _dict.load("./dictionaries/customDictionary.txt");
+        } catch (FileNotFoundException ignored) { }
+        Assertions.assertNull(_dict.getDefinition("покаки"));
+        Assertions.assertFalse(_dict.hasWord("покаки"));
+    }
 
-    // get random word, word with such length dos not found
+    @Test
+    void getRandomWord() {
+        cleanUp();
+        try {
+            _dict.load("./dictionaries/customDictionary.txt");
+        } catch (FileNotFoundException ignored) { }
+        Assertions.assertTrue(_dict.getRandomWord(6) != null
+                && _dict.getRandomWord(6).length() == 6);
+    }
 
-    // add word to dict
+    @Test
+    void getRandomWordWithSuchLengthDoesNotFound() {
+        cleanUp();
+        try {
+            _dict.load("./dictionaries/customDictionary.txt");
+        } catch (FileNotFoundException ignored) { }
+        Assertions.assertNull(_dict.getRandomWord(2));
+    }
 
-    // save dict to file
+    @Test
+    void addWordToDict() {
+        cleanUp();
+        try {
+            _dict.load("./dictionaries/customDictionary.txt");
+        } catch (FileNotFoundException ignored) { }
+        _dict.addWord("хобаа", "привееет");
+        Assertions.assertTrue(_dict.hasWord("хобаа"));
+    }
 
-    // save dict to file, no changes committed
+    @Test
+    void saveDictToFile() {
+        cleanUp();
+        Dictionary newDict = new Dictionary();
+        try {
+            _dict.addWord("хобаа", "привееет");
+            _dict.setModifiableDictionary("./dictionaries/customDictionary.txt");
+            _dict.saveAddedWords();
+            newDict.load("./dictionaries/customDictionary.txt");
+        } catch (RuntimeException | IOException ignored) { }
+        Assertions.assertEquals("привееет", newDict.getDefinition("хобаа"));
+    }
 
+    @Test
+    void saveDictToFileModifiableDictNotDefined() {
+        cleanUp();
+        boolean isError = false;
+        try {
+            _dict.saveAddedWords();
+        } catch (RuntimeException | IOException e) {
+            isError = true;
+        }
+        Assertions.assertTrue(isError);
+    }
 }

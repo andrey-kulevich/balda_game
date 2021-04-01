@@ -57,6 +57,16 @@ public class Player {
      */
     public void addWord(String word) { _composedWords.add(Objects.requireNonNull(word)); }
 
+    /** Add word to dictionary
+     *
+     * @param word word
+     * @param definition definition of word
+     * @return success
+     */
+    public boolean addWordToDictionary(String word, String definition) {
+        return _game.dictionary().addWord(word, definition);
+    }
+
     /** Select specified cell on game field
      *
      * @param row row index

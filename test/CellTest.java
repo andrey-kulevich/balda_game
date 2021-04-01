@@ -1,24 +1,76 @@
+import model.Cell;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 public class CellTest {
-    // select cell to write letter
 
+    Cell _cell;
 
-    // select cell to create word
+    void cleanUp() { _cell = new Cell(); }
 
+    @Test
+    void selectCellToWriteLetter() {
+        cleanUp();
+        _cell.setSelectionState(Cell.SelectionState.SELECTED_TO_WRITE_LETTER);
+        Assertions.assertEquals(Cell.SelectionState.SELECTED_TO_WRITE_LETTER, _cell.selectionState());
+    }
 
-    // clear selection, cell without letter
+    @Test
+    void selectCellToCreateWord() {
+        cleanUp();
+        _cell.setSelectionState(Cell.SelectionState.SELECTED_TO_CREATE_WORD);
+        Assertions.assertEquals(Cell.SelectionState.SELECTED_TO_CREATE_WORD, _cell.selectionState());
+    }
 
+    @Test
+    void clearSelectionCellWithoutLetter() {
+        cleanUp();
+        _cell.clearSelection();
+        Assertions.assertEquals(Cell.SelectionState.NOT_SELECTED, _cell.selectionState());
+        Assertions.assertEquals(-1, _cell.selectionIndex());
+    }
 
-    // clear selection, cell with old letter
+    @Test
+    void clearSelectionCellWithOldLetter() {
+        cleanUp();
+        _cell.setSelectionState(Cell.SelectionState.SELECTED_TO_WRITE_LETTER);
+        _cell.setLetter('б');
+        _cell.setSelectionState(Cell.SelectionState.NOT_SELECTED);
+        _cell.clearSelection();
+        Assertions.assertEquals(Cell.SelectionState.NOT_SELECTED, _cell.selectionState());
+        Assertions.assertEquals(-1, _cell.selectionIndex());
+        Assertions.assertEquals('Б', _cell.letter());
+    }
 
+    @Test
+    void clearSelectionCellWithNewLetter() {
+        cleanUp();
+        _cell.setSelectionState(Cell.SelectionState.SELECTED_TO_WRITE_LETTER);
+        _cell.setLetter('б');
+        _cell.clearSelection();
+        Assertions.assertEquals(Cell.SelectionState.NOT_SELECTED, _cell.selectionState());
+        Assertions.assertEquals(-1, _cell.selectionIndex());
+        Assertions.assertEquals(' ', _cell.letter());
+    }
 
-    // clear selection, cell with new letter
+    @Test
+    void writeToCellWhichIsNotSelected() {
+        cleanUp();
+        Assertions.assertFalse(_cell.setLetter('б'));
+    }
 
+    @Test
+    void writeToCellWhichAlreadyHasALetter() {
+        cleanUp();
+        _cell.setSelectionState(Cell.SelectionState.SELECTED_TO_WRITE_LETTER);
+        _cell.setLetter('б');
+        Assertions.assertFalse(_cell.setLetter('д'));
+    }
 
-    // write to cell
-
-
-    // write to cell, cell is not selected
-
-
-    // write to cell, cell already has a letter
+    @Test
+    void writeNonCyrillicLetter() {
+        cleanUp();
+        _cell.setSelectionState(Cell.SelectionState.SELECTED_TO_WRITE_LETTER);
+        Assertions.assertFalse(_cell.setLetter('z'));
+    }
 }

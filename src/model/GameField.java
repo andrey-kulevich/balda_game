@@ -1,6 +1,8 @@
 package model;
 
-/** Matrix of cells with specified methods to control them */
+import java.util.Objects;
+
+/** Square matrix of cells with specified methods to control them */
 public class GameField {
 
     /** matrix of cells */
@@ -18,6 +20,11 @@ public class GameField {
                     "letters and contain only cyrillic letters");
 
         _cells = new Cell[startWord.length()][startWord.length()];
+        for (int i = 0; i < startWord.length(); i++) {
+            for (int j = 0; j < startWord.length(); j++) {
+                _cells[i][j] = new Cell();
+            }
+        }
 
         for (int i = 0; i < startWord.length(); i++)
             _cells[startWord.length() / 2][i].setLetter(startWord.charAt(i));
@@ -126,6 +133,13 @@ public class GameField {
             }
         }
         return ' ';
+    }
+
+    /** Fix new letter and clear selections */
+    public void prepareToNextMove() {
+        Objects.requireNonNull(this.getCellSelectedToWrite())
+                .setSelectionState(Cell.SelectionState.NOT_SELECTED);
+        this.clearSelections();
     }
 
     /** Clear all selections and current wrote letter */

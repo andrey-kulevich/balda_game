@@ -18,11 +18,11 @@ public class Cell {
      * @param letter Unicode letter
      */
     public boolean setLetter(Character letter) {
-        if (letter.toString().matches("[а-яА-Я]")) {
-            _letter = letter;
-            return true;
-        }
-        return false;
+        if (_selectionState == SelectionState.NOT_SELECTED
+                || _letter != ' '
+                || !letter.toString().matches("[а-яА-Я]")) return false;
+        _letter = Character.toUpperCase(letter);
+        return true;
     }
 
     /** Get letter inside cell
