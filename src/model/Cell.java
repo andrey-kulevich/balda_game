@@ -13,6 +13,19 @@ public class Cell {
     /** selection order */
     private int _selectionIndex = -1;
 
+    /** default constructor */
+    public Cell() {}
+
+    /** Copy constructor
+     *
+     * @param other cell to copy
+     */
+    public Cell(Cell other) {
+        _letter = other._letter;
+        _selectionState = other._selectionState;
+        _selectionIndex = other._selectionIndex;
+    }
+
     /** Put a letter in the cell
      *
      * @param letter Unicode letter

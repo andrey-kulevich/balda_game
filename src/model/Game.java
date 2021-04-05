@@ -87,7 +87,6 @@ public class Game {
     public WordCheckStatus confirmMove() {
         String word = _field.getSelectedWord();
         if (word == null) return WordCheckStatus.CURRENT_LETTER_DOES_NOT_SELECTED;
-
         if (_firstPlayer.getWords().contains(word) || _secondPlayer.getWords().contains(word))
             return WordCheckStatus.WORD_HAD_DISCOVERED_EARLIER;
 

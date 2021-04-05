@@ -73,4 +73,39 @@ public class CellTest {
         _cell.setSelectionState(Cell.SelectionState.SELECTED_TO_WRITE_LETTER);
         Assertions.assertFalse(_cell.setLetter('z'));
     }
+
+    @Test
+    void setSelectionIndex() {
+        cleanUp();
+        _cell.setSelectionState(Cell.SelectionState.SELECTED_TO_WRITE_LETTER);
+        _cell.setLetter('б');
+        _cell.setSelectionIndex(0);
+        Assertions.assertEquals(0, _cell.selectionIndex());
+    }
+
+    @Test
+    void setSelectionIndexToEmptyCell() {
+        cleanUp();
+        Assertions.assertThrows(RuntimeException.class, () -> _cell.setSelectionIndex(0));
+    }
+
+    @Test
+    void setInvalidSelectionIndex() {
+        cleanUp();
+        _cell.setSelectionState(Cell.SelectionState.SELECTED_TO_WRITE_LETTER);
+        _cell.setLetter('б');
+        Assertions.assertThrows(IllegalArgumentException.class, () -> _cell.setSelectionIndex(-1));
+    }
+
+    @Test
+    void getCopyOfCell() {
+        cleanUp();
+        _cell.setSelectionState(Cell.SelectionState.SELECTED_TO_WRITE_LETTER);
+        _cell.setLetter('б');
+        _cell.setSelectionIndex(1);
+        Cell copy = new Cell(_cell);
+        Assertions.assertEquals(Cell.SelectionState.SELECTED_TO_WRITE_LETTER, _cell.selectionState());
+        Assertions.assertEquals(1, _cell.selectionIndex());
+        Assertions.assertEquals('Б', _cell.letter());
+    }
 }
