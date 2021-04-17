@@ -49,7 +49,7 @@ public class GameTest {
         Dictionary dict = new Dictionary();
         try {
             dict.load("./dictionaries/customDictionary.txt");
-            dict.load("./dictionaries/russian_nouns_with_definition.txt");
+            dict.load("./dictionaries/russianNounsWithDefinition.txt");
         } catch (FileNotFoundException ignored) {}
 
         Game game = new Game(5, dict, new Player("bla"), new Player("blo"));
@@ -73,7 +73,7 @@ public class GameTest {
         Dictionary dict = new Dictionary();
         try {
             dict.load("./dictionaries/customDictionary.txt");
-            dict.load("./dictionaries/russian_nouns_with_definition.txt");
+            dict.load("./dictionaries/russianNounsWithDefinition.txt");
         } catch (FileNotFoundException ignored) {}
 
         Game game = new Game(5, dict, new Player("bla"), new Player("blo"));
@@ -95,7 +95,7 @@ public class GameTest {
         Dictionary dict = new Dictionary();
         try {
             dict.load("./dictionaries/customDictionary.txt");
-            dict.load("./dictionaries/russian_nouns_with_definition.txt");
+            dict.load("./dictionaries/russianNounsWithDefinition.txt");
         } catch (FileNotFoundException ignored) {}
 
         Game game = new Game(5, dict, new Player("bla"), new Player("blo"));

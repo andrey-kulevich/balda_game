@@ -27,8 +27,7 @@ public class Dictionary {
         while (reader.hasNextLine()) {
             String data = reader.nextLine();
             String[] splitted = data.split(":", 2);
-            _words.put(splitted[0].replaceAll("\\s+",""),
-                    splitted[1].replaceAll("\\s+",""));
+            _words.put(splitted[0].replaceAll("\\s+",""), splitted.length > 1 ? splitted[1] : " ");
         }
         reader.close();
     }
