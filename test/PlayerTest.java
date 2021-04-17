@@ -33,7 +33,7 @@ public class PlayerTest {
         try {
             dict.load("./dictionaries/customDictionary.txt");
             dict.setModifiableDictionary("./dictionaries/customDictionary.txt");
-            dict.load("./dictionaries/russian_nouns_with_definition.txt");
+            dict.load("./dictionaries/russianNounsWithDefinition.txt");
         } catch (FileNotFoundException ignored) {}
         Game game = new Game(7, dict, new Player("bla"), new Player("blo"));
         Player player = new Player("aaaaa");
@@ -45,7 +45,7 @@ public class PlayerTest {
     void selectCell() {
         Dictionary dict = new Dictionary();
         try {
-            dict.load("./dictionaries/russian_nouns_with_definition.txt");
+            dict.load("./dictionaries/russianNounsWithDefinition.txt");
         } catch (FileNotFoundException ignored) {}
         Game game = new Game(7, dict, new Player("bla"), new Player("blo"));
         Player player = new Player("aaaaa");
@@ -57,7 +57,7 @@ public class PlayerTest {
     void writeToCell() {
         Dictionary dict = new Dictionary();
         try {
-            dict.load("./dictionaries/russian_nouns_with_definition.txt");
+            dict.load("./dictionaries/russianNounsWithDefinition.txt");
         } catch (FileNotFoundException ignored) {}
         Game game = new Game(7, dict, new Player("bla"), new Player("blo"));
         Player player = new Player("aaaaa");
@@ -70,7 +70,7 @@ public class PlayerTest {
     void undoAllActionsCommittedInCurrentMove() {
         Dictionary dict = new Dictionary();
         try {
-            dict.load("./dictionaries/russian_nouns_with_definition.txt");
+            dict.load("./dictionaries/russianNounsWithDefinition.txt");
         } catch (FileNotFoundException ignored) {}
         Game game = new Game(7, dict, new Player("bla"), new Player("blo"));
         Player player = new Player("aaaaa");

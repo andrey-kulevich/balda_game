@@ -1,11 +1,13 @@
 package view;
 
+import view.helpers.GlobalStyles;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends JFrame {
 
-    private StartMenuWidget _startMenu = new StartMenuWidget();
+    private StartMenuWidget _startMenu = new StartMenuWidget(this);
 
     public MainWindow() {
         setTitle("Супер Балда");
@@ -13,6 +15,7 @@ public class MainWindow extends JFrame {
         setSize(new Dimension(1120, 720));
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getContentPane().setBackground(GlobalStyles.PRIMARY_COLOR);
 
         setLayout( new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
