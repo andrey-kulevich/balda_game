@@ -8,5 +8,7 @@ public class CustomActionButton extends JButton {
         setContentAreaFilled(false);
         setFocusPainted(false);
         setBorder(new RoundedBorder(10));
+        setOpaque(true);
+        setBackground(GlobalStyles.PRIMARY_COLOR);
     }
 }

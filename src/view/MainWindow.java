@@ -1,13 +1,16 @@
 package view;
 
+import model.Game;
 import view.helpers.GlobalStyles;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class MainWindow extends JFrame {
 
     private StartMenuWidget _startMenu = new StartMenuWidget(this);
+    private GameWidget _gameWidget = new GameWidget(this);
 
     public MainWindow() {
         setTitle("Супер Балда");
@@ -20,10 +23,20 @@ public class MainWindow extends JFrame {
         setLayout( new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
+        add(_gameWidget, gbc);
         add(_startMenu, gbc);
 
         setVisible(true);
         setLocationRelativeTo(null);
+    }
+
+    public void runGame(Game game) {
+        _gameWidget.setGame(Objects.requireNonNull(game));
+        _gameWidget.setVisible(true);
+    }
+
+    public void toStartMenu() {
+
     }
 
 //    private class RepaintObserver implements GameListener {

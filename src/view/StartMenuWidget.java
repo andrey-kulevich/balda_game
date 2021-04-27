@@ -14,9 +14,9 @@ import java.util.Objects;
 
 public class StartMenuWidget extends JPanel {
 
-    private final JFrame _owner;
+    private final MainWindow _owner;
     private final GameBuilder _builder = new GameBuilder();
-
+    //Todo add validation of names (max 20 symbols)
     private final JTextField _firstPlayerName = new JTextField();
     private final JTextField _secondPlayerName = new JTextField();
     private final JComboBox<String> _fieldSizeSelect = new JComboBox<>(new String[]{"5x5", "6x6", "7x7", "8x8", "9x9"});
@@ -25,7 +25,7 @@ public class StartMenuWidget extends JPanel {
     private final JCheckBox _slangDictionary = new JCheckBox("Сленговые слова");
     private final CustomMessageModal _errorWindow;
 
-    public StartMenuWidget(JFrame owner) {
+    public StartMenuWidget(MainWindow owner) {
 
         _owner = Objects.requireNonNull(owner);
 
@@ -133,6 +133,8 @@ public class StartMenuWidget extends JPanel {
                 if (_slangDictionary.isSelected())
                     _builder.addDictionary("./dictionaries/russianYoungSlang.txt");
             } catch (FileNotFoundException ignored) { }
+
+            _owner.runGame(_builder.initGame());
 
             setVisible(false);
         }

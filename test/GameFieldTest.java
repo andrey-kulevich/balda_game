@@ -97,8 +97,8 @@ public class GameFieldTest {
         field.selectCell(2, 1);
         field.selectCell(2, 2);
         field.clearSelections();
-        for (int i = 0; i < field.fieldSize(); i++) {
-            for (int j = 0; j < field.fieldSize(); j++) {
+        for (int i = 0; i < field.size(); i++) {
+            for (int j = 0; j < field.size(); j++) {
                 Assertions.assertEquals(-1, field.getCell(i, j).selectionIndex());
                 Assertions.assertEquals(Cell.SelectionState.NOT_SELECTED,
                         field.getCell(i, j).selectionState());

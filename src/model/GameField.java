@@ -39,7 +39,7 @@ public class GameField {
      *
      * @return field size
      */
-    public int fieldSize() { return _cells.length; }
+    public int size() { return _cells.length; }
 
     /** Get specified cell
      *
