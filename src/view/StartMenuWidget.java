@@ -16,25 +16,32 @@ public class StartMenuWidget extends JPanel {
 
     private final MainWindow _owner;
     private final GameBuilder _builder = new GameBuilder();
-    //Todo add validation of names (max 20 symbols)
     private final JTextField _firstPlayerName = new JTextField();
     private final JTextField _secondPlayerName = new JTextField();
     private final JComboBox<String> _fieldSizeSelect = new JComboBox<>(new String[]{"5x5", "6x6", "7x7", "8x8", "9x9"});
     private final JCheckBox _jargonDictionary = new JCheckBox("Жаргонные слова");
     private final JCheckBox _russianTownsDictionary = new JCheckBox("Города России");
     private final JCheckBox _slangDictionary = new JCheckBox("Сленговые слова");
-    private final CustomMessageModal _errorWindow;
+    private final CustomMessageModal _emptyNamesError;
+    private final CustomMessageModal _longNamesError;
 
     public StartMenuWidget(MainWindow owner) {
 
         _owner = Objects.requireNonNull(owner);
 
-        JLabel errorMessage = new JLabel("Введите имена игроков!");
-        errorMessage.setFont(GlobalStyles.HEADER_FONT);
-        _errorWindow = new CustomMessageModal(_owner, errorMessage);
-        CustomActionButton cancelButton = new CustomActionButton("ОК");
-        cancelButton.addActionListener(e -> _errorWindow.setVisible(false));
-        _errorWindow.addButton(cancelButton);
+        JLabel message1 = new JLabel("Введите имена игроков!");
+        message1.setFont(GlobalStyles.HEADER_FONT);
+        _emptyNamesError = new CustomMessageModal(_owner, message1);
+        CustomActionButton cancelButton1 = new CustomActionButton("ОК");
+        cancelButton1.addActionListener(e -> _emptyNamesError.setVisible(false));
+        _emptyNamesError.addButton(cancelButton1);
+
+        JLabel message2 = new JLabel("<html>Имена слишком длинные<br>(максимум 20 символов).</html>");
+        message2.setFont(GlobalStyles.HEADER_FONT);
+        _longNamesError = new CustomMessageModal(_owner, message2);
+        CustomActionButton cancelButton2 = new CustomActionButton("ОК");
+        cancelButton2.addActionListener(e -> _longNamesError.setVisible(false));
+        _longNamesError.addButton(cancelButton2);
 
         setPreferredSize(new Dimension(600, 600));
         setBackground(GlobalStyles.SECONDARY_COLOR);
@@ -116,7 +123,9 @@ public class StartMenuWidget extends JPanel {
         String first = _firstPlayerName.getText();
         String second = _secondPlayerName.getText();
         if (second.isEmpty() || first.isEmpty()) {
-            _errorWindow.setVisible(true);
+            _emptyNamesError.setVisible(true);
+        } else if (_firstPlayerName.getText().length() > 5 || _secondPlayerName.getText().length() > 5) {
+            _longNamesError.setVisible(true);
         } else {
             _builder.setFirstPlayer(new Player(first));
             _builder.setSecondPlayer(new Player(second));
@@ -138,10 +147,5 @@ public class StartMenuWidget extends JPanel {
 
             setVisible(false);
         }
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
     }
 }
