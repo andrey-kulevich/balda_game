@@ -79,4 +79,6 @@ public class PlayerWidget extends JPanel {
     private int calculateScore() {
         return 0;
     }
+
+
 }
