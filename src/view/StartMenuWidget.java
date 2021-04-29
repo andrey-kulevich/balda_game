@@ -51,7 +51,7 @@ public class StartMenuWidget extends JPanel {
         constraints.insets = new Insets(20,20,20,20);
 
         // text fields
-        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 1.0;
         constraints.gridy = 0;
         constraints.gridx = 0;
@@ -124,7 +124,7 @@ public class StartMenuWidget extends JPanel {
         String second = _secondPlayerName.getText();
         if (second.isEmpty() || first.isEmpty()) {
             _emptyNamesError.setVisible(true);
-        } else if (_firstPlayerName.getText().length() > 5 || _secondPlayerName.getText().length() > 5) {
+        } else if (_firstPlayerName.getText().length() > 20 || _secondPlayerName.getText().length() > 20) {
             _longNamesError.setVisible(true);
         } else {
             _builder.setFirstPlayer(new Player(first));

@@ -36,14 +36,7 @@ public class MainWindow extends JFrame {
     }
 
     public void toStartMenu() {
-
+        _gameWidget = null;
+        _startMenu.setVisible(true);
     }
-
-//    private class RepaintObserver implements GameListener {
-//        @Override
-//        public void repaint() {
-//            fieldView.repaint();
-//            panelView.repaint();
-//        }
-//    }
 }
