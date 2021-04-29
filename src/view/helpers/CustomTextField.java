@@ -2,17 +2,14 @@ package view.helpers;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
-public class CustomActionButton extends JButton implements MouseListener {
+public class CustomTextField extends JTextField {
 
     private Dimension arcs = new Dimension(10, 10);
 
-    public CustomActionButton(String text) {
-        super(text);
-        setContentAreaFilled(false);
-        setFocusPainted(false);
+    public CustomTextField() {
+        setFont(GlobalStyles.MAIN_FONT);
+        setBorder(new RoundedBorder(10));
         setOpaque(false);
         setBackground(GlobalStyles.PRIMARY_COLOR);
     }
@@ -37,24 +34,5 @@ public class CustomActionButton extends JButton implements MouseListener {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.setColor(Color.decode("#acadae"));
         graphics.drawRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height);
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) { }
-
-    @Override
-    public void mousePressed(MouseEvent e) { }
-
-    @Override
-    public void mouseReleased(MouseEvent e) { }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
     }
 }

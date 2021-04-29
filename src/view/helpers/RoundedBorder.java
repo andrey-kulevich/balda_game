@@ -7,10 +7,12 @@ public class RoundedBorder implements Border {
 
     private final int radius;
 
-    public RoundedBorder(int radius) { this.radius = radius; }
+    public RoundedBorder(int radius) {
+        this.radius = radius;
+    }
 
     public Insets getBorderInsets(Component c) {
-        return new Insets(4, 4, 4, 4);
+        return new Insets(7, 7, 7, 7);
     }
 
     public boolean isBorderOpaque() { return true; }

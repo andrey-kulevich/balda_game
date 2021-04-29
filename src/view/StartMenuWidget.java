@@ -2,22 +2,19 @@ package view;
 
 import model.GameBuilder;
 import model.Player;
-import view.helpers.CustomActionButton;
-import view.helpers.CustomMessageModal;
-import view.helpers.GlobalStyles;
-import view.helpers.RoundedBorder;
+import view.helpers.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.util.Objects;
 
-public class StartMenuWidget extends JPanel {
+public class StartMenuWidget extends RoundedPanel {
 
     private final MainWindow _owner;
     private final GameBuilder _builder = new GameBuilder();
-    private final JTextField _firstPlayerName = new JTextField();
-    private final JTextField _secondPlayerName = new JTextField();
+    private final JTextField _firstPlayerName = new CustomTextField();
+    private final JTextField _secondPlayerName = new CustomTextField();
     private final JComboBox<String> _fieldSizeSelect = new JComboBox<>(new String[]{"5x5", "6x6", "7x7", "8x8", "9x9"});
     private final JCheckBox _jargonDictionary = new JCheckBox("Жаргонные слова");
     private final JCheckBox _russianTownsDictionary = new JCheckBox("Города России");
@@ -26,6 +23,7 @@ public class StartMenuWidget extends JPanel {
     private final CustomMessageModal _longNamesError;
 
     public StartMenuWidget(MainWindow owner) {
+        super(10);
 
         _owner = Objects.requireNonNull(owner);
 
@@ -46,16 +44,23 @@ public class StartMenuWidget extends JPanel {
         setPreferredSize(new Dimension(600, 600));
         setBackground(GlobalStyles.SECONDARY_COLOR);
         setLayout(new GridBagLayout());
-        setBorder(new RoundedBorder(20));
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.insets = new Insets(20,20,20,20);
+        constraints.insets = new Insets(15,15,15,15);
 
         // text fields
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 1.0;
-        constraints.gridy = 0;
         constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 2;
+        constraints.anchor = GridBagConstraints.CENTER;
 
+        JLabel title = new JLabel("НОВАЯ ИГРА", SwingConstants.CENTER);
+        title.setFont(GlobalStyles.HEADER_FONT);
+        add(title, constraints);
+
+        constraints.gridwidth = 1;
+        constraints.gridy = 1;
         JLabel firstPlayerName = new JLabel("Имя первого игрока");
         firstPlayerName.setFont(GlobalStyles.HEADER_FONT);
         add(firstPlayerName, constraints);
@@ -64,33 +69,27 @@ public class StartMenuWidget extends JPanel {
         secondPlayerName.setFont(GlobalStyles.HEADER_FONT);
         add(secondPlayerName, constraints);
 
-        _firstPlayerName.setFont(GlobalStyles.MAIN_FONT);
-        _secondPlayerName.setFont(GlobalStyles.MAIN_FONT);
-        _firstPlayerName.setBorder(new RoundedBorder(10));
-        _secondPlayerName.setBorder(new RoundedBorder(10));
-        _firstPlayerName.setBackground(GlobalStyles.SECONDARY_COLOR);
-        _secondPlayerName.setBackground(GlobalStyles.SECONDARY_COLOR);
-        constraints.gridy = 1;
+        constraints.gridy = 2;
         constraints.gridx = 0;
         add(_firstPlayerName, constraints);
         constraints.gridx = 1;
         add(_secondPlayerName, constraints);
 
         // combobox
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         constraints.gridx = 0;
         JLabel fieldSizeLabel = new JLabel("Размер поля");
         fieldSizeLabel.setFont(GlobalStyles.HEADER_FONT);
         add(fieldSizeLabel, constraints);
-        constraints.gridy = 3;
+        constraints.gridy = 4;
         _fieldSizeSelect.setFont(GlobalStyles.MAIN_FONT);
-        _fieldSizeSelect.setBackground(GlobalStyles.SECONDARY_COLOR);
+        _fieldSizeSelect.setBackground(GlobalStyles.PRIMARY_COLOR);
         add(_fieldSizeSelect, constraints);
 
         // additional dictionaries
         JLabel additionalDictionariesLabel = new JLabel("Дополнительные словари");
         additionalDictionariesLabel.setFont(GlobalStyles.HEADER_FONT);
-        constraints.gridy = 4;
+        constraints.gridy = 5;
         add(additionalDictionariesLabel, constraints);
 
         _jargonDictionary.setFont(GlobalStyles.MAIN_FONT);
@@ -100,17 +99,17 @@ public class StartMenuWidget extends JPanel {
         _slangDictionary.setFont(GlobalStyles.MAIN_FONT);
         _slangDictionary.setBackground(GlobalStyles.SECONDARY_COLOR);
 
-        constraints.gridy = 5;
-        add(_jargonDictionary, constraints);
         constraints.gridy = 6;
-        add(_russianTownsDictionary, constraints);
+        add(_jargonDictionary, constraints);
         constraints.gridy = 7;
+        add(_russianTownsDictionary, constraints);
+        constraints.gridy = 8;
         add(_slangDictionary, constraints);
 
         // start button
         constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.CENTER;
-        constraints.gridy = 8;
+        constraints.gridy = 9;
 
         CustomActionButton _startButton = new CustomActionButton("СОЗДАТЬ");
         _startButton.addActionListener(e -> this.onClickStart());

@@ -3,21 +3,22 @@ package view;
 import model.GameField;
 import view.helpers.GlobalStyles;
 import view.helpers.RoundedBorder;
+import view.helpers.RoundedPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
-public class FieldWidget extends JPanel {
+public class FieldWidget extends RoundedPanel {
 
     private final MainWindow _owner;
     private GameField _field;
 
     public FieldWidget(MainWindow owner) {
+        super(10);
         _owner = Objects.requireNonNull(owner);
         setPreferredSize(new Dimension(600, 600));
         setBackground(GlobalStyles.SECONDARY_COLOR);
-        setBorder(new RoundedBorder(15));
         setVisible(false);
     }
 

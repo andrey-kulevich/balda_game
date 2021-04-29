@@ -3,12 +3,13 @@ package view;
 import view.helpers.CustomActionButton;
 import view.helpers.GlobalStyles;
 import view.helpers.RoundedBorder;
+import view.helpers.RoundedPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
-public class ControlPanelWidget extends JPanel {
+public class ControlPanelWidget extends RoundedPanel {
 
     private final MainWindow _owner;
     private CustomActionButton _skipButton = new CustomActionButton("ПРОПУСТИТЬ");
@@ -16,11 +17,11 @@ public class ControlPanelWidget extends JPanel {
     private CustomActionButton _confirmButton = new CustomActionButton("ПОДТВЕРДИТЬ");
 
     public ControlPanelWidget(MainWindow owner) {
+        super(10);
         _owner = Objects.requireNonNull(owner);
 
         setPreferredSize(new Dimension(600, 50));
         setBackground(GlobalStyles.SECONDARY_COLOR);
-        setBorder(new RoundedBorder(15));
 
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();

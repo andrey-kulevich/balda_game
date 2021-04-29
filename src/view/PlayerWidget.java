@@ -3,13 +3,16 @@ package view;
 import model.Player;
 import view.helpers.GlobalStyles;
 import view.helpers.RoundedBorder;
+import view.helpers.RoundedPanel;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class PlayerWidget extends JPanel {
+public class PlayerWidget extends RoundedPanel {
 
     public enum Orientation { RIGHT, LEFT }
 
@@ -18,31 +21,27 @@ public class PlayerWidget extends JPanel {
     private final Color ACTIVE_PLAYER_COLOR = Color.decode("#B8B8B8");
     private JLabel _name = new JLabel();
     private JLabel _score = new JLabel();
-    private JPanel _wordsPanel = new JPanel();
+    private JPanel _wordsPanel = new RoundedPanel(10);
+    private JPanel rowPack = new JPanel(new BorderLayout(20, 20));
 
     public PlayerWidget(MainWindow owner, Orientation orientation) {
+        super(10);
         MainWindow _owner = Objects.requireNonNull(owner);
 
         setPreferredSize(new Dimension(220, 650));
-        setBorder(new RoundedBorder(15));
         setLayout(new BorderLayout(20, 20));
 
-        JPanel namePanel = new JPanel();
-        JPanel scorePanel = new JPanel();
+        JPanel namePanel = new RoundedPanel(10);
+        JPanel scorePanel = new RoundedPanel(10);
         namePanel.setBackground(GlobalStyles.PRIMARY_COLOR);
         scorePanel.setBackground(GlobalStyles.PRIMARY_COLOR);
         _wordsPanel.setLayout(new BoxLayout(_wordsPanel, BoxLayout.Y_AXIS));
         _wordsPanel.setBackground(GlobalStyles.PRIMARY_COLOR);
-        namePanel.setPreferredSize(new Dimension(150, 80));
-        scorePanel.setPreferredSize(new Dimension(60, 80));
-        _wordsPanel.setPreferredSize(new Dimension(210, 570));
-        namePanel.setBorder(new RoundedBorder(10));
-        scorePanel.setBorder(new RoundedBorder(10));
-        _wordsPanel.setBorder(new RoundedBorder(10));
+        namePanel.setPreferredSize(new Dimension(150, 60));
+        scorePanel.setPreferredSize(new Dimension(50, 60));
+        _wordsPanel.setPreferredSize(new Dimension(210, 560));
 
-        JPanel rowPack = new JPanel(new BorderLayout(20, 20));
         rowPack.setPreferredSize(new Dimension(210, 80));
-        rowPack.setBackground(GlobalStyles.PRIMARY_COLOR);
 
         if (orientation == Orientation.RIGHT) {
             rowPack.add(namePanel, BorderLayout.LINE_END);
@@ -64,12 +63,10 @@ public class PlayerWidget extends JPanel {
     public void setPlayer(Player player) {
         _player = Objects.requireNonNull(player);
         String name = player.name();
-        if (name.length() > 10) {
-            _name.setText("<html>" + name.substring(0, 10) + "<br>" + name.substring(10, name.length() - 1) + "</html>");
-        } else {
-            _name.setText(name);
-        }
-        _score.setText(((Integer)calculateScore()).toString());
+        if (name.length() > 10) _name.setText("<html>" + name.substring(0, 10) +
+                "<br>" + name.substring(10, name.length() - 1) + "</html>");
+        else _name.setText(name);
+        this.update();
     }
 
     private int calculateScore() {
@@ -85,6 +82,10 @@ public class PlayerWidget extends JPanel {
             JLabel wordLabel = new JLabel(word);
             wordLabel.setFont(GlobalStyles.MAIN_FONT);
             _wordsPanel.add(wordLabel);
+        }
+        if (_player.isActive()) {
+            setBackground(ACTIVE_PLAYER_COLOR);
+            rowPack.setBackground(ACTIVE_PLAYER_COLOR);
         }
     }
 }
