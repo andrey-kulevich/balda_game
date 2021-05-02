@@ -86,11 +86,8 @@ public class Dictionary {
         if (_addedWords.size() > 0) {
             FileWriter writer = new FileWriter(_modifiableDictionary, true);
             _addedWords.forEach((key, value) -> {
-                try {
-                    writer.write("\n" + key + " : " + value);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                try { writer.write("\n" + key + " : " + value); }
+                catch (IOException e) { e.printStackTrace(); }
             });
             writer.close();
         }
