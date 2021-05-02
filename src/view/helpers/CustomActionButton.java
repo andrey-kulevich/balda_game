@@ -2,12 +2,10 @@ package view.helpers;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
-public class CustomActionButton extends JButton implements MouseListener {
+public class CustomActionButton extends JButton {
 
-    private Dimension arcs = new Dimension(10, 10);
+    private final Dimension arcs = new Dimension(10, 10);
 
     public CustomActionButton(String text) {
         super(text);
@@ -15,6 +13,15 @@ public class CustomActionButton extends JButton implements MouseListener {
         setFocusPainted(false);
         setOpaque(false);
         setBackground(GlobalStyles.PRIMARY_COLOR);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                setBackground(GlobalStyles.SECONDARY_COLOR);
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                setBackground(GlobalStyles.PRIMARY_COLOR);
+            }
+        });
     }
 
     @Override
@@ -37,24 +44,5 @@ public class CustomActionButton extends JButton implements MouseListener {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.setColor(Color.decode("#acadae"));
         graphics.drawRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height);
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) { }
-
-    @Override
-    public void mousePressed(MouseEvent e) { }
-
-    @Override
-    public void mouseReleased(MouseEvent e) { }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
     }
 }

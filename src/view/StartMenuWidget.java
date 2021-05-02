@@ -87,7 +87,7 @@ public class StartMenuWidget extends RoundedPanel {
         add(_fieldSizeSelect, constraints);
 
         // additional dictionaries
-        JLabel additionalDictionariesLabel = new JLabel("Дополнительные словари");
+        JLabel additionalDictionariesLabel = new JLabel("Доп. словари");
         additionalDictionariesLabel.setFont(GlobalStyles.HEADER_FONT);
         constraints.gridy = 5;
         add(additionalDictionariesLabel, constraints);

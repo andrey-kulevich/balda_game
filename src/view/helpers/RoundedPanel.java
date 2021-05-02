@@ -3,10 +3,10 @@ package view.helpers;
 import javax.swing.*;
 import java.awt.*;
 
-public class RoundedPanel extends JPanel
-{
+public class RoundedPanel extends JPanel {
+
     private Color backgroundColor;
-    private int cornerRadius;
+    private final int cornerRadius;
 
     public RoundedPanel(LayoutManager layout, int radius) {
         super(layout);

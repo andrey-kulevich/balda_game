@@ -2,10 +2,8 @@ package view;
 
 import model.GameField;
 import view.helpers.GlobalStyles;
-import view.helpers.RoundedBorder;
 import view.helpers.RoundedPanel;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
@@ -25,9 +23,11 @@ public class FieldWidget extends RoundedPanel {
     public void setField(GameField field) {
         _field = Objects.requireNonNull(field);
         int fieldSize = _field.size();
-        setLayout(new GridLayout(fieldSize, fieldSize, 5, 5));
-        for (int i = 0; i < fieldSize * fieldSize; i++) {
-            add(new CellWidget());
+        setLayout(new GridLayout(fieldSize, fieldSize, 4, 4));
+        for (int i = 0; i < fieldSize; i++) {
+            for (int j = 0; j < fieldSize; j++) {
+                add(new CellWidget(i, j, fieldSize, _field.getCell(i, j).letter()));
+            }
         }
         setVisible(true);
     }

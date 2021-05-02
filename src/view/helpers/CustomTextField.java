@@ -5,13 +5,22 @@ import java.awt.*;
 
 public class CustomTextField extends JTextField {
 
-    private Dimension arcs = new Dimension(10, 10);
+    private final Dimension arcs = new Dimension(10, 10);
 
     public CustomTextField() {
         setFont(GlobalStyles.MAIN_FONT);
         setBorder(new RoundedBorder(10));
         setOpaque(false);
         setBackground(GlobalStyles.PRIMARY_COLOR);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                setBackground(GlobalStyles.SECONDARY_COLOR);
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                setBackground(GlobalStyles.PRIMARY_COLOR);
+            }
+        });
     }
 
     @Override
