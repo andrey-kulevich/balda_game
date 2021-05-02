@@ -10,7 +10,8 @@ public class Game {
         SUCCESS,
         CURRENT_LETTER_DOES_NOT_SELECTED,
         WORD_HAD_DISCOVERED_EARLIER,
-        WORD_DOES_NOT_EXIST
+        WORD_DOES_NOT_EXIST,
+        GAME_IS_OVER
     }
 
     /** game field with cells */
@@ -21,6 +22,8 @@ public class Game {
     private final Player _firstPlayer;
     /** second player */
     private final Player _secondPlayer;
+    /** game over flag */
+    private boolean _isGameOver = false;
 
     /** Constructor
      *
@@ -85,12 +88,18 @@ public class Game {
      * @return status
      */
     public WordCheckStatus confirmMove() {
+        if (_isGameOver) return WordCheckStatus.GAME_IS_OVER;
+
         String word = _field.getSelectedWord();
         if (word == null) return WordCheckStatus.CURRENT_LETTER_DOES_NOT_SELECTED;
         if (_firstPlayer.getWords().contains(word) || _secondPlayer.getWords().contains(word))
             return WordCheckStatus.WORD_HAD_DISCOVERED_EARLIER;
 
         if (_dictionary.hasWord(word)) {
+            if (_field.hasEmptyCells()) {
+                _isGameOver = true;
+                return WordCheckStatus.GAME_IS_OVER;
+            }
             this.activePlayer().addWord(word);
             _field.prepareToNextMove();
             this.nextPlayer();

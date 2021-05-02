@@ -172,4 +172,14 @@ public class GameField {
             }
         }
     }
+
+    /** Check if field has empty cells */
+    public boolean hasEmptyCells() {
+        for (Cell[] row : _cells) {
+            for (Cell cell : row) {
+                if (!cell.hasLetter()) return true;
+            }
+        }
+        return false;
+    }
 }
