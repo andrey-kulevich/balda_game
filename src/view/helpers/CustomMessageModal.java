@@ -6,6 +6,7 @@ import java.awt.*;
 public class CustomMessageModal extends JDialog {
 
     private final GridBagConstraints constraints = new GridBagConstraints();
+    private final JLabel _text;
 
     public CustomMessageModal(JFrame owner, JLabel message) {
         super(owner, "", true);
@@ -13,6 +14,8 @@ public class CustomMessageModal extends JDialog {
         setResizable(false);
         setSize(new Dimension(500, 200));
         getContentPane().setBackground(GlobalStyles.PRIMARY_COLOR);
+
+        _text = message;
 
         setLayout(new GridBagLayout());
         constraints.insets = new Insets(20,20,20,20);
@@ -33,4 +36,6 @@ public class CustomMessageModal extends JDialog {
         constraints.anchor = GridBagConstraints.SOUTHEAST;
         add(button, constraints);
     }
+
+    public void setMessage(String message) { _text.setText(message); }
 }

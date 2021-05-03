@@ -33,7 +33,7 @@ public class Cell {
     public boolean setLetter(Character letter) {
         if (_selectionState == SelectionState.NOT_SELECTED
                 || _letter != ' '
-                || !letter.toString().matches("[а-яА-Я]")) return false;
+                || !letter.toString().matches("[а-яёА-ЯЁ]")) return false;
         _letter = Character.toUpperCase(letter);
         return true;
     }

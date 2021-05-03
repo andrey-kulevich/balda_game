@@ -11,12 +11,12 @@ import java.util.Objects;
 
 public class ControlPanelWidget extends RoundedPanel {
 
-    private final MainWindow _owner;
+    private final JPanel _owner;
     private CustomActionButton _skipButton = new CustomActionButton("ПРОПУСТИТЬ");
     private CustomActionButton _cancelButton = new CustomActionButton("ОТМЕНИТЬ");
     private CustomActionButton _confirmButton = new CustomActionButton("ПОДТВЕРДИТЬ");
 
-    public ControlPanelWidget(MainWindow owner) {
+    public ControlPanelWidget(JPanel owner) {
         super(10);
         _owner = Objects.requireNonNull(owner);
 

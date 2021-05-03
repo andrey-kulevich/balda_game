@@ -2,14 +2,16 @@ package view;
 
 
 import model.Game;
+import model.events.PlayerActionListener;
 import view.helpers.GlobalStyles;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
-public class GameWidget extends JPanel {
+public class GameWidget extends JPanel implements PlayerActionListener {
 
+    private Game _game;
     private final MainWindow _owner;
     private final FieldWidget _field;
     private final ControlPanelWidget _controlPanel;
@@ -19,9 +21,9 @@ public class GameWidget extends JPanel {
     public GameWidget(MainWindow owner) {
         _owner = Objects.requireNonNull(owner);
         _field = new FieldWidget(owner);
-        _controlPanel = new ControlPanelWidget(owner);
-        _firstPlayer = new PlayerWidget(owner, PlayerWidget.Orientation.LEFT);
-        _secondPlayer = new PlayerWidget(owner, PlayerWidget.Orientation.RIGHT);
+        _controlPanel = new ControlPanelWidget(this);
+        _firstPlayer = new PlayerWidget(this, PlayerWidget.Orientation.LEFT);
+        _secondPlayer = new PlayerWidget(this, PlayerWidget.Orientation.RIGHT);
         setPreferredSize(new Dimension(1080, 660));
         setBackground(GlobalStyles.PRIMARY_COLOR);
 
@@ -41,10 +43,41 @@ public class GameWidget extends JPanel {
         setVisible(false);
     }
 
+    public Game getGame() { return _game; }
+
     public void setGame(Game game) {
+        _game = Objects.requireNonNull(game);
         _field.setField(game.field());
+        game.firstPlayer().addWord("ложка");
+        game.firstPlayer().addWord("душа");
+        game.firstPlayer().addWord("жизнь");
         _firstPlayer.setPlayer(game.firstPlayer());
         _secondPlayer.setPlayer(game.secondPlayer());
         setVisible(true);
+    }
+
+    @Override
+    public void cellSelected(int col, int row) {
+
+    }
+
+    @Override
+    public void letterInserted(int col, int row) {
+
+    }
+
+    @Override
+    public void moveConfirmed() {
+
+    }
+
+    @Override
+    public void moveSkipped() {
+
+    }
+
+    @Override
+    public void actionsUndone() {
+
     }
 }

@@ -17,7 +17,6 @@ public class CustomActionButton extends JButton {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 setBackground(GlobalStyles.SECONDARY_COLOR);
             }
-
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 setBackground(GlobalStyles.PRIMARY_COLOR);
             }

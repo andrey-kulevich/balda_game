@@ -96,7 +96,7 @@ public class Game {
             return WordCheckStatus.WORD_HAD_DISCOVERED_EARLIER;
 
         if (_dictionary.hasWord(word)) {
-            if (_field.hasEmptyCells()) {
+            if (!_field.hasEmptyCells()) {
                 _isGameOver = true;
                 return WordCheckStatus.GAME_IS_OVER;
             }
