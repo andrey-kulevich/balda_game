@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class MainWindow extends JFrame {
 
-    private StartMenuWidget _startMenu = new StartMenuWidget(this);
+    private final StartMenuWidget _startMenu = new StartMenuWidget(this);
     private GameWidget _gameWidget = new GameWidget(this);
 
     public MainWindow() {

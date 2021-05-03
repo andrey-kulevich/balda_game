@@ -20,7 +20,7 @@ public class GameWidget extends JPanel implements PlayerActionListener {
 
     public GameWidget(MainWindow owner) {
         _owner = Objects.requireNonNull(owner);
-        _field = new FieldWidget(owner);
+        _field = new FieldWidget(this);
         _controlPanel = new ControlPanelWidget(this);
         _firstPlayer = new PlayerWidget(this, PlayerWidget.Orientation.LEFT);
         _secondPlayer = new PlayerWidget(this, PlayerWidget.Orientation.RIGHT);
@@ -47,7 +47,7 @@ public class GameWidget extends JPanel implements PlayerActionListener {
 
     public void setGame(Game game) {
         _game = Objects.requireNonNull(game);
-        _field.setField(game.field());
+        _field.initField();
         game.firstPlayer().addWord("ложка");
         game.firstPlayer().addWord("душа");
         game.firstPlayer().addWord("жизнь");
@@ -58,26 +58,19 @@ public class GameWidget extends JPanel implements PlayerActionListener {
 
     @Override
     public void cellSelected(int col, int row) {
-
+        // update specified cell and top panel with letters chain
     }
 
     @Override
-    public void letterInserted(int col, int row) {
-
-    }
-
-    @Override
-    public void moveConfirmed() {
-
-    }
-
-    @Override
-    public void moveSkipped() {
-
+    public void moveCommitted() {
+        _secondPlayer.update();
+        _firstPlayer.update();
+        _field.update();
+        // clear and remove top panel with letters chain
     }
 
     @Override
     public void actionsUndone() {
-
+        _field.update();
     }
 }
