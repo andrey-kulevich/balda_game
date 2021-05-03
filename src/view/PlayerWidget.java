@@ -12,7 +12,6 @@ import java.util.Objects;
 public class PlayerWidget extends RoundedPanel {
 
     public enum Orientation { RIGHT, LEFT }
-    private final Color ACTIVE_PLAYER_COLOR = Color.decode("#B8B8B8");
 
     private Player _player;
     private final GameWidget _owner;
@@ -125,8 +124,11 @@ public class PlayerWidget extends RoundedPanel {
             _wordsPanel.add(wordLabel);
         }
         if (_player.isActive()) {
-            setBackground(ACTIVE_PLAYER_COLOR);
-            rowPack.setBackground(ACTIVE_PLAYER_COLOR);
+            setBackground(GlobalStyles.SELECTED_ITEM_COLOR);
+            rowPack.setBackground(GlobalStyles.SELECTED_ITEM_COLOR);
+        } else {
+            setBackground(GlobalStyles.SECONDARY_COLOR);
+            rowPack.setBackground(GlobalStyles.SECONDARY_COLOR);
         }
     }
 }
