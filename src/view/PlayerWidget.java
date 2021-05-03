@@ -1,35 +1,41 @@
 package view;
 
 import model.Player;
-import view.helpers.GlobalStyles;
-import view.helpers.RoundedBorder;
-import view.helpers.RoundedPanel;
+import view.helpers.*;
 
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.ArrayList;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Objects;
 
 public class PlayerWidget extends RoundedPanel {
 
     public enum Orientation { RIGHT, LEFT }
+    private final Color ACTIVE_PLAYER_COLOR = Color.decode("#B8B8B8");
 
     private Player _player;
+    private final GameWidget _owner;
+    private final JLabel _name = new JLabel();
+    private final JLabel _score = new JLabel();
+    private final JPanel _wordsPanel = new RoundedPanel(10);
+    private final JPanel rowPack = new JPanel(new BorderLayout(20, 20));
+    private final CustomMessageModal _wordDefinitionModal;
 
-    private final Color ACTIVE_PLAYER_COLOR = Color.decode("#B8B8B8");
-    private JLabel _name = new JLabel();
-    private JLabel _score = new JLabel();
-    private JPanel _wordsPanel = new RoundedPanel(10);
-    private JPanel rowPack = new JPanel(new BorderLayout(20, 20));
-
-    public PlayerWidget(MainWindow owner, Orientation orientation) {
+    public PlayerWidget(GameWidget owner, Orientation orientation) {
         super(10);
-        MainWindow _owner = Objects.requireNonNull(owner);
+        _owner = Objects.requireNonNull(owner);
 
         setPreferredSize(new Dimension(220, 650));
         setLayout(new BorderLayout(20, 20));
+
+        // word definition modal
+        JLabel message = new JLabel("");
+        message.setFont(GlobalStyles.MAIN_FONT);
+        _wordDefinitionModal = new CustomMessageModal(null, message);
+        CustomActionButton cancelButton = new CustomActionButton("ОК");
+        cancelButton.addActionListener(e -> _wordDefinitionModal.setVisible(false));
+        _wordDefinitionModal.addButton(cancelButton);
 
         JPanel namePanel = new RoundedPanel(10);
         JPanel scorePanel = new RoundedPanel(10);
@@ -81,6 +87,41 @@ public class PlayerWidget extends RoundedPanel {
         for (String word : _player.getWords()) {
             JLabel wordLabel = new JLabel(word);
             wordLabel.setFont(GlobalStyles.MAIN_FONT);
+            wordLabel.addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent e) {
+                    String definition = _owner.getGame().dictionary().getDefinition(wordLabel.getText());
+                    if (definition.length() > 650) {
+                        _wordDefinitionModal.setSize(new Dimension(500, 700));
+                        _wordDefinitionModal.setLocation(520, 70);
+                    } else if (definition.length() > 550) {
+                        _wordDefinitionModal.setSize(new Dimension(500, 500));
+                        _wordDefinitionModal.setLocation(520, 150);
+                    } else if (definition.length() > 450) {
+                        _wordDefinitionModal.setSize(new Dimension(500, 400));
+                        _wordDefinitionModal.setLocation(520, 250);
+                    } else {
+                        _wordDefinitionModal.setSize(new Dimension(500, 300));
+                        _wordDefinitionModal.setLocation(520, 300);
+                    }
+
+                    _wordDefinitionModal.setMessage(
+                            "<html>" +
+                                "<div style='width: 450; max-height: 150;'>" +
+                                    "<h2 style='text-align: center;'>" +
+                                        wordLabel.getText().toUpperCase() +
+                                    "</h2>" +
+                                    _owner.getGame().dictionary().getDefinition(wordLabel.getText()) +
+                                "</div>" +
+                            "</html>");
+                    _wordDefinitionModal.setVisible(true);
+                }
+                public void mouseEntered(MouseEvent e) {
+                    wordLabel.setFont(new Font("Roboto", Font.BOLD, 16));
+                }
+                public void mouseExited(MouseEvent e) {
+                    wordLabel.setFont(GlobalStyles.MAIN_FONT);
+                }
+            });
             _wordsPanel.add(wordLabel);
         }
         if (_player.isActive()) {
