@@ -9,17 +9,11 @@ public class CustomTextField extends JTextField {
 
     public CustomTextField() {
         setFont(GlobalStyles.MAIN_FONT);
-        setBorder(new RoundedBorder(10));
         setOpaque(false);
         setBackground(GlobalStyles.PRIMARY_COLOR);
         addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                setBackground(GlobalStyles.SECONDARY_COLOR);
-            }
-
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                setBackground(GlobalStyles.PRIMARY_COLOR);
-            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) { setBackground(GlobalStyles.SECONDARY_COLOR); }
+            public void mouseExited(java.awt.event.MouseEvent evt) { setBackground(GlobalStyles.PRIMARY_COLOR); }
         });
     }
 

@@ -2,26 +2,29 @@ package view;
 
 import view.helpers.CustomActionButton;
 import view.helpers.GlobalStyles;
-import view.helpers.RoundedBorder;
 import view.helpers.RoundedPanel;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
 public class ControlPanelWidget extends RoundedPanel {
 
-    private final JPanel _owner;
-    private CustomActionButton _skipButton = new CustomActionButton("ПРОПУСТИТЬ");
-    private CustomActionButton _cancelButton = new CustomActionButton("ОТМЕНИТЬ");
-    private CustomActionButton _confirmButton = new CustomActionButton("ПОДТВЕРДИТЬ");
+    private final GameWidget _owner;
 
-    public ControlPanelWidget(JPanel owner) {
+    public ControlPanelWidget(GameWidget owner) {
         super(10);
         _owner = Objects.requireNonNull(owner);
 
         setPreferredSize(new Dimension(600, 50));
         setBackground(GlobalStyles.SECONDARY_COLOR);
+
+        CustomActionButton skipButton = new CustomActionButton("ПРОПУСТИТЬ");
+        CustomActionButton cancelButton = new CustomActionButton("ОТМЕНИТЬ");
+        CustomActionButton confirmButton = new CustomActionButton("ПОДТВЕРДИТЬ");
+
+        skipButton.addActionListener(e -> _owner.skipMove());
+        cancelButton.addActionListener(e -> _owner.undoCurrentActions());
+        confirmButton.addActionListener(e -> _owner.confirmMove());
 
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -30,8 +33,8 @@ public class ControlPanelWidget extends RoundedPanel {
         constraints.weighty = 1.0;
         constraints.fill = GridBagConstraints.BOTH;
 
-        add(_skipButton, constraints);
-        add(_cancelButton, constraints);
-        add(_confirmButton, constraints);
+        add(skipButton, constraints);
+        add(cancelButton, constraints);
+        add(confirmButton, constraints);
     }
 }

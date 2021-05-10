@@ -85,13 +85,9 @@ public class Player {
     /** Undo all actions committed in current move */
     public void undoCurrentActions() { _game.field().clearSelections(); }
 
-    public void skipMove() {
-        _game.skipMove();
+    /** Skip current move */
+    public void skipMove() { _game.skipMove(); }
 
-    }
-
-    public Game.WordCheckStatus confirmMove() {
-        return _game.confirmMove();
-
-    }
+    /** Confirm move */
+    public Game.WordCheckStatus confirmMove() { return _game.confirmMove(); }
 }

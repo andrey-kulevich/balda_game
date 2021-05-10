@@ -1,4 +1,3 @@
-import model.*;
 import view.MainWindow;
 
 import javax.swing.*;
