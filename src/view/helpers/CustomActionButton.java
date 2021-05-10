@@ -23,6 +23,14 @@ public class CustomActionButton extends JButton {
         });
     }
 
+    public CustomActionButton() {
+        super("");
+        setContentAreaFilled(false);
+        setFocusPainted(false);
+        setOpaque(false);
+        setBackground(GlobalStyles.PRIMARY_COLOR);
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

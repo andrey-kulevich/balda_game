@@ -37,14 +37,18 @@ public class FieldWidget extends RoundedPanel {
                 int finalJ = j;
                 cell.addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent e) {
-                        if (_owner.getGame().activePlayer().selectCell(finalI, finalJ))
+                        if (_owner.getGame().activePlayer().selectCell(finalI, finalJ)) {
+                            System.out.println("selected");
                             cell.setSelection(field.getCell(finalI, finalJ).selectionState());
+                        }
                     }
                 });
                 cell.addKeyListener(new KeyListener() {
                     public void keyPressed(KeyEvent e) {
-                        if (_owner.getGame().activePlayer().writeToSelectedCell(e.getKeyChar()))
+                        if (_owner.getGame().activePlayer().writeToSelectedCell(e.getKeyChar())) {
+                            System.out.println("wrote");
                             cell.setLetter(field.getCell(finalI, finalJ).letter());
+                        }
                     }
                     public void keyTyped(KeyEvent e) { }
                     public void keyReleased(KeyEvent e) { }

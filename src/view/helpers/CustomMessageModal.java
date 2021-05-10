@@ -7,6 +7,7 @@ public class CustomMessageModal extends JDialog {
 
     private final GridBagConstraints constraints = new GridBagConstraints();
     private final JLabel _text;
+    private final JPanel _buttonGroup = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
     public CustomMessageModal(JFrame owner, JLabel message) {
         super(owner, "", true);
@@ -25,17 +26,17 @@ public class CustomMessageModal extends JDialog {
         constraints.gridy = 0;
         constraints.gridx = 0;
         add(message, constraints);
-    }
 
-    public void addButton(JButton button) {
-        constraints.fill = GridBagConstraints.PAGE_END;
         constraints.weighty = 1.0;
-        constraints.ipadx = 40;
         constraints.gridy = 1;
         constraints.gridx = 1;
+        constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.SOUTHEAST;
-        add(button, constraints);
+        _buttonGroup.setBackground(GlobalStyles.PRIMARY_COLOR);
+        add(_buttonGroup, constraints);
     }
+
+    public void addButton(JButton button) { _buttonGroup.add(button); }
 
     public void setMessage(String message) { _text.setText(message); }
 }

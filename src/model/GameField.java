@@ -56,7 +56,7 @@ public class GameField {
      * @return success of selection
      */
     public boolean selectCell(int row, int col) {
-        if (_currentSelectionIndex == -1 && this.canSelectToWrite(row, col)) {
+        if (_currentSelectionIndex == -1 && this.canSelectToWrite(row, col) && this.getCellSelectedToWrite() == null) {
             _cells[row][col].setSelectionState(Cell.SelectionState.SELECTED_TO_WRITE_LETTER);
             return true;
         } else if ((_currentSelectionIndex == -1 && this.getCellSelectedToWrite() != null &&

@@ -5,13 +5,12 @@ import view.helpers.CustomActionButton;
 import view.helpers.GlobalStyles;
 
 import java.awt.*;
-import java.awt.event.MouseListener;
 import java.util.Objects;
 
 public class CellWidget extends CustomActionButton {
 
     public CellWidget(int fieldSize, Character initLetter) {
-        super("");
+        super();
         int fontSize;
         switch (fieldSize) {
             case 5 -> fontSize = 60;
@@ -23,14 +22,11 @@ public class CellWidget extends CustomActionButton {
         setFont(new Font("Roboto", Font.PLAIN, fontSize));
         this.setLetter(initLetter);
 
-        //for (MouseListener listener : getMouseListeners()) removeMouseListener(listener);
-
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 if (!getBackground().equals(Color.decode("#D0D0D0")) &&
                         !getBackground().equals(GlobalStyles.SELECTED_ITEM_COLOR))
                     setBackground(GlobalStyles.SECONDARY_COLOR);
-
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 if (!getBackground().equals(Color.decode("#D0D0D0")) &&
