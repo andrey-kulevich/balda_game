@@ -37,6 +37,11 @@ public class FieldWidget extends RoundedPanel {
                 int finalJ = j;
                 cell.addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent e) {
+                        if (_owner.getGame().field().getCellSelectedToWrite() != null &&
+                                !_owner.getGame().field().getCellSelectedToWrite().hasLetter()) {
+                            _owner.getGame().activePlayer().undoCurrentActions();
+                            update();
+                        }
                         if (_owner.getGame().activePlayer().selectCell(finalI, finalJ)) {
                             System.out.println("selected");
                             cell.setSelection(field.getCell(finalI, finalJ).selectionState());

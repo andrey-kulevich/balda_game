@@ -86,7 +86,7 @@ public class GameField {
      *
      * @return cell (null if cell does not found)
      */
-    private Cell getCellSelectedToWrite() {
+    public Cell getCellSelectedToWrite() {
         for (Cell[] row : _cells) {
             for (Cell cell : row) {
                 if (cell.selectionState() == Cell.SelectionState.SELECTED_TO_WRITE_LETTER)
