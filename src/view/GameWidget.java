@@ -19,32 +19,14 @@ public class GameWidget extends JPanel {
     private final PlayerWidget _secondPlayer;
 
     private final CustomMessageModal _wordDoesNotExistError;
-//    private final CustomMessageModal _currentLetterDoesNotSelectedError;
-//    private final CustomMessageModal _wordHadDiscoveredEarlierError;
-//    private final CustomMessageModal _gameIsOver;
-//    private final CustomMessageModal _skipMoveWarning;
-//    private final CustomMessageModal _goToStartMenuWarning;
+    private final CustomMessageModal _currentLetterDoesNotSelectedError;
+    private final CustomMessageModal _wordHadDiscoveredEarlierError;
+    private final CustomMessageModal _gameIsOver;
+    private final CustomMessageModal _skipMoveWarning;
+    private final CustomMessageModal _goToStartMenuWarning;
 
     public GameWidget(MainWindow owner) {
         _owner = Objects.requireNonNull(owner);
-
-        // create modal windows
-        JLabel message1 = new JLabel(
-                    "<html>" +
-                            "<div style='width: 450; text-align: center;'>" +
-                                "Такое слово нет в доступных словарях.<br>Добавить его в словарь?" +
-                            "</div>" +
-                        "<html>");
-        message1.setFont(GlobalStyles.HEADER_FONT);
-        _wordDoesNotExistError = new CustomMessageModal(_owner, message1);
-        CustomActionButton cancelButton1 = new CustomActionButton("Отмена");
-        cancelButton1.addActionListener(e -> _wordDoesNotExistError.setVisible(false));
-        _wordDoesNotExistError.addButton(cancelButton1);
-        CustomActionButton confirmButton1 = new CustomActionButton("Да");
-        confirmButton1.addActionListener(e -> _wordDoesNotExistError.setVisible(false));
-        _wordDoesNotExistError.addButton(confirmButton1);
-
-
 
         // create main widgets
         _field = new FieldWidget(this);
@@ -67,6 +49,83 @@ public class GameWidget extends JPanel {
         add(verticalPack, BorderLayout.CENTER);
         add(_secondPlayer, BorderLayout.EAST);
 
+        // create modal windows
+        JLabel message1 = new JLabel(
+                    "<html>" +
+                            "<div style='width: 450; text-align: center;'>" +
+                                "Такое слово нет в доступных словарях.<br>Добавить его в словарь?" +
+                            "</div>" +
+                        "<html>");
+        message1.setFont(GlobalStyles.HEADER_FONT);
+        _wordDoesNotExistError = new CustomMessageModal(_owner, message1);
+        CustomActionButton cancelButton1 = new CustomActionButton("ОТМЕНА");
+        cancelButton1.addActionListener(e -> _wordDoesNotExistError.setVisible(false));
+        _wordDoesNotExistError.addButton(cancelButton1);
+        CustomActionButton confirmButton1 = new CustomActionButton("ДА");
+        confirmButton1.addActionListener(e -> _wordDoesNotExistError.setVisible(false));
+        _wordDoesNotExistError.addButton(confirmButton1);
+
+        JLabel message2 = new JLabel(
+                    "<html>" +
+                            "<div style='width: 500; text-align: center;'>" +
+                                "Ошибка!<br>В вашем слове нет буквы, добавленной в этом ходу." +
+                            "</div>" +
+                        "<html>");
+        message2.setFont(GlobalStyles.HEADER_FONT);
+        _currentLetterDoesNotSelectedError = new CustomMessageModal(_owner, message2);
+        _currentLetterDoesNotSelectedError.setSize(new Dimension(550, 200));
+        CustomActionButton confirmButton2 = new CustomActionButton("ОК");
+        confirmButton2.addActionListener(e -> _currentLetterDoesNotSelectedError.setVisible(false));
+        _currentLetterDoesNotSelectedError.addButton(confirmButton2);
+
+        JLabel message3 = new JLabel("Это слово уже было отгадано ранее.");
+        message3.setFont(GlobalStyles.HEADER_FONT);
+        _wordHadDiscoveredEarlierError = new CustomMessageModal(_owner, message3);
+        CustomActionButton confirmButton3 = new CustomActionButton("ОК");
+        confirmButton3.addActionListener(e -> _wordHadDiscoveredEarlierError.setVisible(false));
+        _wordHadDiscoveredEarlierError.addButton(confirmButton3);
+
+        JLabel message4 = new JLabel("ПОБЕДИТЕЛЬ - ");
+        message4.setFont(GlobalStyles.HEADER_FONT);
+        _gameIsOver = new CustomMessageModal(_owner, message4);
+        CustomActionButton confirmButton4 = new CustomActionButton("ОК");
+        confirmButton4.addActionListener(e -> _gameIsOver.setVisible(false));
+        _gameIsOver.addButton(confirmButton4);
+
+        JLabel message5 = new JLabel("Вы уверены, что хотите пропустить ход?");
+        message5.setFont(GlobalStyles.HEADER_FONT);
+        _skipMoveWarning = new CustomMessageModal(_owner, message5);
+        CustomActionButton cancelButton5 = new CustomActionButton("ОТМЕНА");
+        cancelButton5.addActionListener(e -> _skipMoveWarning.setVisible(false));
+        _skipMoveWarning.addButton(cancelButton5);
+        CustomActionButton confirmButton5 = new CustomActionButton("ДА");
+        confirmButton5.addActionListener(e -> {
+            _game.activePlayer().skipMove();
+            _firstPlayer.update();
+            _secondPlayer.update();
+            _field.update();
+            _skipMoveWarning.setVisible(false);
+        });
+        _skipMoveWarning.addButton(confirmButton5);
+
+        JLabel message6 = new JLabel(
+                    "<html>" +
+                            "<div style='width: 500; text-align: center;'>" +
+                                "Выйти в главное меню?<br>Весь текущий прогресс будет утерян." +
+                            "</div>" +
+                        "<html>");
+        message6.setFont(GlobalStyles.HEADER_FONT);
+        _goToStartMenuWarning = new CustomMessageModal(_owner, message6);
+        CustomActionButton cancelButton6 = new CustomActionButton("ОТМЕНА");
+        cancelButton6.addActionListener(e -> _goToStartMenuWarning.setVisible(false));
+        _goToStartMenuWarning.addButton(cancelButton6);
+        CustomActionButton confirmButton6 = new CustomActionButton("ДА");
+        confirmButton6.addActionListener(e -> {
+            _owner.toStartMenu();
+            _goToStartMenuWarning.setVisible(false);
+        });
+        _goToStartMenuWarning.addButton(confirmButton6);
+
         setVisible(false);
     }
 
@@ -75,9 +134,6 @@ public class GameWidget extends JPanel {
     public void setGame(Game game) {
         _game = Objects.requireNonNull(game);
         _field.initField();
-        game.firstPlayer().addWord("ложка");
-        game.firstPlayer().addWord("душа");
-        game.firstPlayer().addWord("жизнь");
         _firstPlayer.setPlayer(game.firstPlayer());
         _secondPlayer.setPlayer(game.secondPlayer());
         setVisible(true);
@@ -85,23 +141,15 @@ public class GameWidget extends JPanel {
 
     public void confirmMove() {
         switch (_game.activePlayer().confirmMove()) {
-            case SUCCESS:
+            case SUCCESS -> {
                 _firstPlayer.update();
                 _secondPlayer.update();
                 _field.update();
-                break;
-            case CURRENT_LETTER_DOES_NOT_SELECTED:
-
-                break;
-            case WORD_DOES_NOT_EXIST:
-                _wordDoesNotExistError.setVisible(true);
-                break;
-            case WORD_HAD_DISCOVERED_EARLIER:
-
-                break;
-            case GAME_IS_OVER:
-
-                break;
+            }
+            case CURRENT_LETTER_DOES_NOT_SELECTED -> _currentLetterDoesNotSelectedError.setVisible(true);
+            case WORD_DOES_NOT_EXIST -> _wordDoesNotExistError.setVisible(true);
+            case WORD_HAD_DISCOVERED_EARLIER -> _wordHadDiscoveredEarlierError.setVisible(true);
+            case GAME_IS_OVER -> _gameIsOver.setVisible(true);
         }
     }
 
@@ -111,9 +159,6 @@ public class GameWidget extends JPanel {
     }
 
     public void skipMove() {
-        _game.activePlayer().skipMove();
-        _firstPlayer.update();
-        _secondPlayer.update();
-        _field.update();
+        _skipMoveWarning.setVisible(true);
     }
 }
