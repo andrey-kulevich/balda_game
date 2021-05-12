@@ -15,7 +15,7 @@ public class SelectionOrderWidget extends RoundedPanel {
     public SelectionOrderWidget(GameWidget owner) {
         super(10);
         _owner = Objects.requireNonNull(owner);
-        setPreferredSize(new Dimension(600, 50));
+        setPreferredSize(new Dimension(600, 30));
         setBackground(GlobalStyles.SECONDARY_COLOR);
         add(_lettersOrder, BorderLayout.CENTER);
         setVisible(true);
