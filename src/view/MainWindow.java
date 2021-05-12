@@ -9,22 +9,21 @@ import java.util.Objects;
 
 public class MainWindow extends JFrame {
 
+    private final GridBagConstraints _gbc = new GridBagConstraints();
     private final StartMenuWidget _startMenu = new StartMenuWidget(this);
     private GameWidget _gameWidget = new GameWidget(this);
 
     public MainWindow() {
         setTitle("Супер Балда");
         setIconImage(new ImageIcon("./img/icon.png").getImage());
-        setSize(new Dimension(1120, 720));
+        setSize(new Dimension(1120, 760));
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(GlobalStyles.PRIMARY_COLOR);
-
         setLayout( new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
 
-        add(_gameWidget, gbc);
-        add(_startMenu, gbc);
+        add(_gameWidget, _gbc);
+        add(_startMenu, _gbc);
 
         setVisible(true);
         setLocationRelativeTo(null);
@@ -36,7 +35,9 @@ public class MainWindow extends JFrame {
     }
 
     public void toStartMenu() {
-        _gameWidget = null;
+        _gameWidget.setVisible(false);
+        _gameWidget = new GameWidget(this);
+        add(_gameWidget, _gbc);
         _startMenu.setVisible(true);
     }
 }

@@ -17,6 +17,7 @@ public class GameWidget extends JPanel {
     private final FieldWidget _field;
     private final PlayerWidget _firstPlayer;
     private final PlayerWidget _secondPlayer;
+    private final SelectionOrderWidget _selectionOrder;
 
     private final CustomMessageModal _wordDoesNotExistError;
     private final CustomMessageModal _currentLetterDoesNotSelectedError;
@@ -24,6 +25,7 @@ public class GameWidget extends JPanel {
     private final CustomMessageModal _gameIsOver;
     private final CustomMessageModal _skipMoveWarning;
     private final CustomMessageModal _goToStartMenuWarning;
+    private final CustomMessageModal _aboutGame;
 
     public GameWidget(MainWindow owner) {
         _owner = Objects.requireNonNull(owner);
@@ -34,7 +36,7 @@ public class GameWidget extends JPanel {
         _firstPlayer = new PlayerWidget(this, PlayerWidget.Orientation.LEFT);
         _secondPlayer = new PlayerWidget(this, PlayerWidget.Orientation.RIGHT);
 
-        setPreferredSize(new Dimension(1080, 660));
+        setPreferredSize(new Dimension(1080, 700));
         setBackground(GlobalStyles.PRIMARY_COLOR);
         setLayout(new BorderLayout(10, 10));
 
@@ -48,6 +50,40 @@ public class GameWidget extends JPanel {
 
         add(verticalPack, BorderLayout.CENTER);
         add(_secondPlayer, BorderLayout.EAST);
+
+        JLabel message6 = new JLabel(
+                "<html>" +
+                        "<div style='width: 500; text-align: center;'>" +
+                            "Выйти в главное меню?<br>Весь текущий прогресс будет утерян." +
+                        "</div>" +
+                    "<html>");
+        message6.setFont(GlobalStyles.HEADER_FONT);
+        _goToStartMenuWarning = new CustomMessageModal(_owner, message6);
+
+        JPanel topBar = new JPanel(new BorderLayout(10, 10));
+        topBar.setBackground(GlobalStyles.PRIMARY_COLOR);
+        CustomActionButton toMainMenuButton = new CustomActionButton("В МЕНЮ");
+        toMainMenuButton.setPreferredSize(new Dimension(220, 30));
+        toMainMenuButton.addActionListener(e -> _goToStartMenuWarning.setVisible(true));
+        CustomActionButton aboutGameButton = new CustomActionButton("ОБ ИГРЕ");
+        aboutGameButton.setPreferredSize(new Dimension(220, 30));
+
+        JLabel message7 = new JLabel(
+                "<html>" +
+                        "<div style='width: 450; text-align: center;'>" +
+                            "<h2>Правила игры</h2>" +
+                            "Правила игры. В вашем слове нет буквы, добавленной в этом ходу." +
+                        "</div>" +
+                    "<html>");
+        message7.setFont(GlobalStyles.MAIN_FONT);
+        _aboutGame = new CustomMessageModal(_owner, message7);
+
+        aboutGameButton.addActionListener(e -> _aboutGame.setVisible(true));
+        _selectionOrder = new SelectionOrderWidget(this);
+        topBar.add(toMainMenuButton, BorderLayout.WEST);
+        topBar.add(_selectionOrder, BorderLayout.CENTER);
+        topBar.add(aboutGameButton, BorderLayout.EAST);
+        add(topBar, BorderLayout.NORTH);
 
         // create modal windows
         JLabel message1 = new JLabel(
@@ -108,14 +144,6 @@ public class GameWidget extends JPanel {
         });
         _skipMoveWarning.addButton(confirmButton5);
 
-        JLabel message6 = new JLabel(
-                    "<html>" +
-                            "<div style='width: 500; text-align: center;'>" +
-                                "Выйти в главное меню?<br>Весь текущий прогресс будет утерян." +
-                            "</div>" +
-                        "<html>");
-        message6.setFont(GlobalStyles.HEADER_FONT);
-        _goToStartMenuWarning = new CustomMessageModal(_owner, message6);
         CustomActionButton cancelButton6 = new CustomActionButton("ОТМЕНА");
         cancelButton6.addActionListener(e -> _goToStartMenuWarning.setVisible(false));
         _goToStartMenuWarning.addButton(cancelButton6);
@@ -125,6 +153,11 @@ public class GameWidget extends JPanel {
             _goToStartMenuWarning.setVisible(false);
         });
         _goToStartMenuWarning.addButton(confirmButton6);
+
+        _aboutGame.setSize(new Dimension(500, 500));
+        CustomActionButton confirmButton7 = new CustomActionButton("ОК");
+        confirmButton7.addActionListener(e -> _aboutGame.setVisible(false));
+        _aboutGame.addButton(confirmButton7);
 
         setVisible(false);
     }
