@@ -70,16 +70,25 @@ public class GameWidget extends JPanel {
 
         JLabel message7 = new JLabel(
                 "<html>" +
-                        "<div style='width: 450; text-align: center;'>" +
-                            "<h2>Правила игры</h2>" +
-                            "Правила игры. В вашем слове нет буквы, добавленной в этом ходу." +
+                        "<div style='width: 450;'>" +
+                            "<h2 style='text-align: center;'>Правила игры</h2>" +
+                            "<p>В начале игры есть поле из клеток, посреди которого написано слово. " +
+                            "Игроки по очереди выбирают одну букву из алфавита и располагают её на поле таким образом, " +
+                            "чтобы получилось новое слово (игрок должен самостоятельно задать слово). " +
+                            "Добавленная буква обязательно должна входить в новое слово. " +
+                            "Игрок может пропустить ход. За каждое слово игрок получает некоторое количество очков, " +
+                            "равное числу букв в слове. Побеждает игрок, набравший наибольшее количество очков. " +
+                            "Правильность слов оценивается согласно словарю.</p> <br>" +
+                            "Автор приложения: " +
+                            "<a href='#'>https://github.com/andrey-kulevich</a>" +
                         "</div>" +
                     "<html>");
         message7.setFont(GlobalStyles.MAIN_FONT);
         _aboutGame = new CustomMessageModal(_owner, message7);
+        _aboutGame.setLocation(520, 100);
 
         aboutGameButton.addActionListener(e -> _aboutGame.setVisible(true));
-        _selectionOrder = new SelectionOrderWidget(this);
+        _selectionOrder = new SelectionOrderWidget();
         topBar.add(toMainMenuButton, BorderLayout.WEST);
         topBar.add(_selectionOrder, BorderLayout.CENTER);
         topBar.add(aboutGameButton, BorderLayout.EAST);
@@ -98,7 +107,11 @@ public class GameWidget extends JPanel {
         cancelButton1.addActionListener(e -> _wordDoesNotExistError.setVisible(false));
         _wordDoesNotExistError.addButton(cancelButton1);
         CustomActionButton confirmButton1 = new CustomActionButton("ДА");
-        confirmButton1.addActionListener(e -> _wordDoesNotExistError.setVisible(false));
+        confirmButton1.addActionListener(e -> {
+            _game.activePlayer().addWordToDictionary(_game.field().getSelectedWord(), " ");
+            this.confirmMove();
+            _wordDoesNotExistError.setVisible(false);
+        });
         _wordDoesNotExistError.addButton(confirmButton1);
 
         JLabel message2 = new JLabel(
@@ -178,6 +191,7 @@ public class GameWidget extends JPanel {
                 _firstPlayer.update();
                 _secondPlayer.update();
                 _field.update();
+                _selectionOrder.clear();
             }
             case CURRENT_LETTER_DOES_NOT_SELECTED -> _currentLetterDoesNotSelectedError.setVisible(true);
             case WORD_DOES_NOT_EXIST -> _wordDoesNotExistError.setVisible(true);
@@ -189,9 +203,15 @@ public class GameWidget extends JPanel {
     public void undoCurrentActions() {
         _game.activePlayer().undoCurrentActions();
         _field.update();
+        _selectionOrder.clear();
     }
 
     public void skipMove() {
         _skipMoveWarning.setVisible(true);
+        _selectionOrder.clear();
+    }
+
+    public void extendSelectionOrder(Character letter) {
+        _selectionOrder.addLetter(letter);
     }
 }
