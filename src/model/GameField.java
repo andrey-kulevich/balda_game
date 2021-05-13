@@ -41,6 +41,12 @@ public class GameField {
      */
     public int size() { return _cells.length; }
 
+    /** Get current selection index
+     *
+     * @return current selection index
+     */
+    public int currentSelectionIndex() { return _currentSelectionIndex; }
+
     /** Get specified cell
      *
      * @param row row index
@@ -118,9 +124,9 @@ public class GameField {
      */
     private boolean canSelectToCreateWord(int row, int col) {
         return _cells[row][col].hasLetter() &&
-                ((row + 1 < _cells.length - 1 && _cells[row + 1][col].selectionIndex() == _currentSelectionIndex) ||
+                ((row + 1 < _cells.length && _cells[row + 1][col].selectionIndex() == _currentSelectionIndex) ||
                 (row - 1 >= 0 && _cells[row - 1][col].selectionIndex() == _currentSelectionIndex) ||
-                (col + 1 < _cells.length - 1 && _cells[row][col + 1].selectionIndex() == _currentSelectionIndex) ||
+                (col + 1 < _cells.length && _cells[row][col + 1].selectionIndex() == _currentSelectionIndex) ||
                 (col - 1 >= 0 && _cells[row][col - 1].selectionIndex() == _currentSelectionIndex));
     }
 

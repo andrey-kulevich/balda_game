@@ -21,6 +21,7 @@ public class StartMenuWidget extends RoundedPanel {
     private final JCheckBox _slangDictionary = new JCheckBox("Сленговые слова");
     private final CustomMessageModal _emptyNamesError;
     private final CustomMessageModal _longNamesError;
+    private final CustomMessageModal _equalNamesError;
 
     public StartMenuWidget(MainWindow owner) {
         super(10);
@@ -40,6 +41,13 @@ public class StartMenuWidget extends RoundedPanel {
         CustomActionButton cancelButton2 = new CustomActionButton("ОК");
         cancelButton2.addActionListener(e -> _longNamesError.setVisible(false));
         _longNamesError.addButton(cancelButton2);
+
+        JLabel message3 = new JLabel("Имена не могут быть одинаковыми.");
+        message3.setFont(GlobalStyles.HEADER_FONT);
+        _equalNamesError = new CustomMessageModal(_owner, message3);
+        CustomActionButton cancelButton3 = new CustomActionButton("ОК");
+        cancelButton3.addActionListener(e -> _equalNamesError.setVisible(false));
+        _equalNamesError.addButton(cancelButton3);
 
         setPreferredSize(new Dimension(600, 600));
         setBackground(GlobalStyles.SECONDARY_COLOR);
@@ -123,14 +131,15 @@ public class StartMenuWidget extends RoundedPanel {
         String second = _secondPlayerName.getText();
         if (second.isEmpty() || first.isEmpty()) {
             _emptyNamesError.setVisible(true);
-        } else if (_firstPlayerName.getText().length() > 20 || _secondPlayerName.getText().length() > 20) {
+        } else if (first.length() > 20 || second.length() > 20) {
             _longNamesError.setVisible(true);
+        } else if (first.equals(second)) {
+            _equalNamesError.setVisible(true);
         } else {
             _builder.setFirstPlayer(new Player(first));
             _builder.setSecondPlayer(new Player(second));
             _builder.setFieldSize(Character.getNumericValue(
                     Objects.requireNonNull(_fieldSizeSelect.getSelectedItem()).toString().charAt(0)));
-
             try {
                 _builder.addDictionary("./dictionaries/russianNounsWithDefinition.txt");
                 _builder.addDictionary("./dictionaries/customDictionary.txt");

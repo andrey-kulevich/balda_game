@@ -69,7 +69,7 @@ public class PlayerWidget extends RoundedPanel {
         _player = Objects.requireNonNull(player);
         String name = player.name();
         if (name.length() > 10) _name.setText("<html>" + name.substring(0, 10) +
-                "<br>" + name.substring(10, name.length() - 1) + "</html>");
+                "<br>" + name.substring(10) + "</html>");
         else _name.setText(name);
         this.update();
     }
