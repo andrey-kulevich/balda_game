@@ -134,11 +134,12 @@ public class GameWidget extends JPanel {
         confirmButton3.addActionListener(e -> _wordHadDiscoveredEarlierError.setVisible(false));
         _wordHadDiscoveredEarlierError.addButton(confirmButton3);
 
-        JLabel message4 = new JLabel("ПОБЕДИТЕЛЬ - ");
+        JLabel message4 = new JLabel("ИГРА ОКОНЧЕНА!");
         message4.setFont(GlobalStyles.HEADER_FONT);
         _gameIsOver = new CustomMessageModal(_owner, message4);
-        CustomActionButton confirmButton4 = new CustomActionButton("ОК");
-        confirmButton4.addActionListener(e -> _gameIsOver.setVisible(false));
+        _gameIsOver.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        CustomActionButton confirmButton4 = new CustomActionButton("В МЕНЮ");
+        confirmButton4.addActionListener(e -> _owner.toStartMenu());
         _gameIsOver.addButton(confirmButton4);
 
         JLabel message5 = new JLabel("Вы уверены, что хотите пропустить ход?");
