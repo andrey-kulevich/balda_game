@@ -12,11 +12,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Objects;
 
+/** Represents the matrix of cells */
 public class FieldWidget extends RoundedPanel {
 
     private final GameWidget _owner;
     private CellWidget[][] _cells;
 
+    /** Constructor
+     *
+     * @param owner parent game widget
+     */
     public FieldWidget(GameWidget owner) {
         super(10);
         _owner = Objects.requireNonNull(owner);
@@ -25,11 +30,13 @@ public class FieldWidget extends RoundedPanel {
         setVisible(false);
     }
 
+    /** Create cells and attach key and mouse listeners to each of them */
     public void initField() {
         GameField field = _owner.getGame().field();
         _cells = new CellWidget[field.size()][field.size()];
         int fieldSize = field.size();
         setLayout(new GridLayout(fieldSize, fieldSize, 4, 4));
+        // iterate through each cell in matrix
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
                 CellWidget cell = new CellWidget(fieldSize, field.getCell(i, j).letter());
@@ -66,6 +73,7 @@ public class FieldWidget extends RoundedPanel {
         setVisible(true);
     }
 
+    /** Update widget depends of field modal state */
     public void update() {
         GameField field = _owner.getGame().field();
         for (int i = 0; i < field.size(); i++) {

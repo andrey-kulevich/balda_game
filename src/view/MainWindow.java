@@ -12,6 +12,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.Objects;
 
+/** Main view frame */
 public class MainWindow extends JFrame {
 
     private final GridBagConstraints _gbc = new GridBagConstraints();
@@ -19,13 +20,16 @@ public class MainWindow extends JFrame {
     private GameWidget _gameWidget = new GameWidget(this);
     private final CustomMessageModal _saveAddedWordsWarning;
 
+    /** constructor */
     public MainWindow() {
+        //define main settings
         setTitle("Супер Балда");
         setIconImage(new ImageIcon("./img/icon.png").getImage());
         setSize(new Dimension(1120, 760));
         setResizable(false);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
+        // modal window on frame close
         JLabel message = new JLabel("Сохранить добавленные слова?");
         message.setFont(GlobalStyles.HEADER_FONT);
         _saveAddedWordsWarning = new CustomMessageModal(null, message);
@@ -47,6 +51,7 @@ public class MainWindow extends JFrame {
         });
         _saveAddedWordsWarning.addButton(confirmButton);
 
+        // open modal window on frame close
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 if (_gameWidget.getGame() == null) System.exit(0);
@@ -54,6 +59,7 @@ public class MainWindow extends JFrame {
             }
         });
 
+        // add widgets to layout
         getContentPane().setBackground(GlobalStyles.PRIMARY_COLOR);
         setLayout( new GridBagLayout());
 
@@ -64,11 +70,16 @@ public class MainWindow extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /** Start game with specified settings
+     *
+     * @param game game model
+     */
     public void runGame(Game game) {
         _gameWidget.setGame(Objects.requireNonNull(game));
         _gameWidget.setVisible(true);
     }
 
+    /** Exit to start menu and destroy the current game */
     public void toStartMenu() {
         _gameWidget.setVisible(false);
         _gameWidget = new GameWidget(this);

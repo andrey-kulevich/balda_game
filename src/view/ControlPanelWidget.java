@@ -7,10 +7,15 @@ import view.helpers.RoundedPanel;
 import java.awt.*;
 import java.util.Objects;
 
+/** Panel with control buttons */
 public class ControlPanelWidget extends RoundedPanel {
 
     private final GameWidget _owner;
 
+    /** Constructor
+     *
+     * @param owner parent game widget
+     */
     public ControlPanelWidget(GameWidget owner) {
         super(10);
         _owner = Objects.requireNonNull(owner);
