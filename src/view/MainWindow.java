@@ -24,16 +24,20 @@ public class MainWindow extends JFrame {
         setIconImage(new ImageIcon("./img/icon.png").getImage());
         setSize(new Dimension(1120, 760));
         setResizable(false);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         JLabel message = new JLabel("Сохранить добавленные слова?");
         message.setFont(GlobalStyles.HEADER_FONT);
         _saveAddedWordsWarning = new CustomMessageModal(null, message);
-        CustomActionButton cancelButton = new CustomActionButton("НЕТ");
-        cancelButton.addActionListener(e -> {
+        CustomActionButton cancelButton = new CustomActionButton("ОТМЕНА");
+        cancelButton.addActionListener(e -> _saveAddedWordsWarning.setVisible(false));
+        _saveAddedWordsWarning.addButton(cancelButton);
+        CustomActionButton notSaveButton = new CustomActionButton("НЕТ");
+        notSaveButton.addActionListener(e -> {
             _saveAddedWordsWarning.setVisible(false);
             System.exit(0);
         });
-        _saveAddedWordsWarning.addButton(cancelButton);
+        _saveAddedWordsWarning.addButton(notSaveButton);
         CustomActionButton confirmButton = new CustomActionButton("ДА");
         confirmButton.addActionListener(e -> {
             try { _gameWidget.getGame().dictionary().saveAddedWords(); }
@@ -44,7 +48,10 @@ public class MainWindow extends JFrame {
         _saveAddedWordsWarning.addButton(confirmButton);
 
         addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) { _saveAddedWordsWarning.setVisible(true); }
+            public void windowClosing(WindowEvent e) {
+                if (_gameWidget.getGame() == null) System.exit(0);
+                else _saveAddedWordsWarning.setVisible(true);
+            }
         });
 
         getContentPane().setBackground(GlobalStyles.PRIMARY_COLOR);
