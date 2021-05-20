@@ -2,6 +2,7 @@ package view.helpers;
 
 import java.awt.*;
 
+/** Interface contains global styles that used in entire app */
 public interface GlobalStyles {
     Color PRIMARY_COLOR = Color.WHITE;
     Color SECONDARY_COLOR = Color.decode("#f3f3f3");

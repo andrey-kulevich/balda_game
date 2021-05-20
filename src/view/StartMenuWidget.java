@@ -9,6 +9,7 @@ import java.awt.*;
 import java.io.FileNotFoundException;
 import java.util.Objects;
 
+/** Represents the start menu with setting to create new game */
 public class StartMenuWidget extends RoundedPanel {
 
     private final MainWindow _owner;
@@ -23,11 +24,15 @@ public class StartMenuWidget extends RoundedPanel {
     private final CustomMessageModal _longNamesError;
     private final CustomMessageModal _equalNamesError;
 
+    /** Constructor
+     *
+     * @param owner parent JFrame
+     */
     public StartMenuWidget(MainWindow owner) {
         super(10);
-
         _owner = Objects.requireNonNull(owner);
 
+        // modal windows for player's names validation
         JLabel message1 = new JLabel("Введите имена игроков!");
         message1.setFont(GlobalStyles.HEADER_FONT);
         _emptyNamesError = new CustomMessageModal(_owner, message1);
@@ -126,6 +131,7 @@ public class StartMenuWidget extends RoundedPanel {
         setVisible(true);
     }
 
+    /** Generate the new game with specified settings */
     private void onClickStart() {
         String first = _firstPlayerName.getText();
         String second = _secondPlayerName.getText();

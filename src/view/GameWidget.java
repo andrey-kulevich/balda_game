@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
+/** Panel with all main game objects */
 public class GameWidget extends JPanel {
 
     private final MainWindow _owner;
@@ -27,6 +28,10 @@ public class GameWidget extends JPanel {
     private final CustomMessageModal _goToStartMenuWarning;
     private final CustomMessageModal _aboutGame;
 
+    /** Constructor
+     *
+     * @param owner parent JFrame
+     */
     public GameWidget(MainWindow owner) {
         _owner = Objects.requireNonNull(owner);
 
@@ -51,6 +56,7 @@ public class GameWidget extends JPanel {
         add(verticalPack, BorderLayout.CENTER);
         add(_secondPlayer, BorderLayout.EAST);
 
+        // create modal windows
         JLabel message6 = new JLabel(
                 "<html>" +
                         "<div style='width: 500; text-align: center;'>" +
@@ -179,8 +185,16 @@ public class GameWidget extends JPanel {
         setVisible(false);
     }
 
+    /** Get game model
+     *
+     * @return game model
+     */
     public Game getGame() { return _game; }
 
+    /** Set game
+     *
+     * @param game game model
+     */
     public void setGame(Game game) {
         _game = Objects.requireNonNull(game);
         _field.initField();
@@ -189,6 +203,7 @@ public class GameWidget extends JPanel {
         setVisible(true);
     }
 
+    /** Confirm move and update all widgets on change of move */
     public void confirmMove() {
         switch (_game.activePlayer().confirmMove()) {
             case SUCCESS -> {
@@ -204,18 +219,22 @@ public class GameWidget extends JPanel {
         }
     }
 
+    /** Undo actions committed in current move */
     public void undoCurrentActions() {
         _game.activePlayer().undoCurrentActions();
         _field.update();
         _selectionOrder.clear();
     }
 
+    /** Skip move and change active player */
     public void skipMove() {
         _skipMoveWarning.setVisible(true);
         _selectionOrder.clear();
     }
 
-    public void extendSelectionOrder(Character letter) {
-        _selectionOrder.addLetter(letter);
-    }
+    /** Add new selected letter to the help panel
+     *
+     * @param letter selected letter
+     */
+    public void extendSelectionOrder(Character letter) { _selectionOrder.addLetter(letter); }
 }

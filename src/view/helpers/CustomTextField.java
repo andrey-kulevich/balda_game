@@ -3,10 +3,12 @@ package view.helpers;
 import javax.swing.*;
 import java.awt.*;
 
+/** Customized text field */
 public class CustomTextField extends JTextField {
 
     private final Dimension arcs = new Dimension(10, 10);
 
+    /** Constructor */
     public CustomTextField() {
         setFont(GlobalStyles.MAIN_FONT);
         setOpaque(false);

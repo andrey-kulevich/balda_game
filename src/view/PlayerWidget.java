@@ -9,8 +9,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Objects;
 
+/** Represents the state of players in the game */
 public class PlayerWidget extends RoundedPanel {
 
+    /** Variants of player's visualisation depends of widget's position */
     public enum Orientation { RIGHT, LEFT }
 
     private Player _player;
@@ -21,6 +23,11 @@ public class PlayerWidget extends RoundedPanel {
     private final JPanel rowPack = new JPanel(new BorderLayout(20, 20));
     private final CustomMessageModal _wordDefinitionModal;
 
+    /** Constructor
+     *
+     * @param owner game widget
+     * @param orientation orientation of widget
+     */
     public PlayerWidget(GameWidget owner, Orientation orientation) {
         super(10);
         _owner = Objects.requireNonNull(owner);
@@ -36,6 +43,7 @@ public class PlayerWidget extends RoundedPanel {
         cancelButton.addActionListener(e -> _wordDefinitionModal.setVisible(false));
         _wordDefinitionModal.addButton(cancelButton);
 
+        // pack widgets
         JPanel namePanel = new RoundedPanel(10);
         JPanel scorePanel = new RoundedPanel(10);
         namePanel.setBackground(GlobalStyles.PRIMARY_COLOR);
@@ -65,6 +73,10 @@ public class PlayerWidget extends RoundedPanel {
         scorePanel.add(_score, BorderLayout.CENTER);
     }
 
+    /** Link player model to this
+     *
+     * @param player player model
+     */
     public void setPlayer(Player player) {
         _player = Objects.requireNonNull(player);
         String name = player.name();
@@ -74,15 +86,15 @@ public class PlayerWidget extends RoundedPanel {
         this.update();
     }
 
-    private int calculateScore() {
-        return _player.getWords().stream().mapToInt(String::length).sum();
-    }
-
+    /** Update widget depends of player model state */
     public void update() {
-        _score.setText(((Integer)calculateScore()).toString());
+        // calculate new score
+        _score.setText(((Integer)_player.getWords().stream().mapToInt(String::length).sum()).toString());
         _wordsPanel.removeAll();
         _wordsPanel.revalidate();
         _wordsPanel.repaint();
+
+        // redraw words list
         for (String word : _player.getWords()) {
             JLabel wordLabel = new JLabel(word);
             wordLabel.setFont(GlobalStyles.MAIN_FONT);
@@ -123,6 +135,8 @@ public class PlayerWidget extends RoundedPanel {
             });
             _wordsPanel.add(wordLabel);
         }
+
+        // select active player
         if (_player.isActive()) {
             setBackground(GlobalStyles.SELECTED_ITEM_COLOR);
             rowPack.setBackground(GlobalStyles.SELECTED_ITEM_COLOR);

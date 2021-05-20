@@ -7,8 +7,14 @@ import view.helpers.GlobalStyles;
 import java.awt.*;
 import java.util.Objects;
 
+/** Cell on the game field */
 public class CellWidget extends CustomActionButton {
 
+    /** Constructor
+     *
+     * @param fieldSize size of the game field
+     * @param initLetter start letter
+     */
     public CellWidget(int fieldSize, Character initLetter) {
         super();
         int fontSize;
@@ -36,6 +42,10 @@ public class CellWidget extends CustomActionButton {
         });
     }
 
+    /** Set the cell's selection state
+     *
+     * @param state selection state
+     */
     public void setSelection(Cell.SelectionState state) {
         switch (state) {
             case NOT_SELECTED -> setBackground(GlobalStyles.PRIMARY_COLOR);
@@ -44,6 +54,10 @@ public class CellWidget extends CustomActionButton {
         }
     }
 
+    /** Set letter to cell
+     *
+     * @param letter letter
+     */
     public void setLetter(Character letter) {
         setText(Objects.requireNonNull(letter).toString());
     }

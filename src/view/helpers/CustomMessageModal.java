@@ -3,12 +3,17 @@ package view.helpers;
 import javax.swing.*;
 import java.awt.*;
 
+/** Customized modal window */
 public class CustomMessageModal extends JDialog {
 
-    private final GridBagConstraints constraints = new GridBagConstraints();
     private final JLabel _text;
     private final JPanel _buttonGroup = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
+    /** Constructor
+     *
+     * @param owner parent JFrame
+     * @param message text in window
+     */
     public CustomMessageModal(JFrame owner, JLabel message) {
         super(owner, "", true);
         setLocation(520, 300);
@@ -19,6 +24,7 @@ public class CustomMessageModal extends JDialog {
         _text = message;
 
         setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(20,20,20,20);
         constraints.weightx = 1.0;
         constraints.fill = GridBagConstraints.CENTER;
@@ -36,7 +42,15 @@ public class CustomMessageModal extends JDialog {
         add(_buttonGroup, constraints);
     }
 
+    /** Add button to window
+     *
+     * @param button button
+     */
     public void addButton(JButton button) { _buttonGroup.add(button); }
 
+    /** Change message in modal
+     *
+     * @param message text
+     */
     public void setMessage(String message) { _text.setText(message); }
 }

@@ -3,10 +3,15 @@ package view.helpers;
 import javax.swing.*;
 import java.awt.*;
 
+/** Customized button */
 public class CustomActionButton extends JButton {
 
     private final Dimension arcs = new Dimension(10, 10);
 
+    /** Create button with text and predefined behavior
+     *
+     * @param text button's text
+     */
     public CustomActionButton(String text) {
         super(text);
         setContentAreaFilled(false);
@@ -23,6 +28,7 @@ public class CustomActionButton extends JButton {
         });
     }
 
+    /** Create empty button without any behavior */
     public CustomActionButton() {
         super("");
         setContentAreaFilled(false);
