@@ -36,6 +36,12 @@ public class GameBuilder {
      */
     public void setSecondPlayer(Player player) { _secondPlayer = Objects.requireNonNull(player); }
 
+    /** Get dictionary
+     *
+     * @return dictionary
+     */
+    public Dictionary dictionary() { return _dictionary; }
+
     /** add dictionary to game */
     public void addDictionary(String filename) throws FileNotFoundException {
         _dictionary.load(Objects.requireNonNull(filename));
