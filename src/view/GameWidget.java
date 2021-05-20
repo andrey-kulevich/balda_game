@@ -108,7 +108,7 @@ public class GameWidget extends JPanel {
         _wordDoesNotExistError.addButton(cancelButton1);
         CustomActionButton confirmButton1 = new CustomActionButton("ДА");
         confirmButton1.addActionListener(e -> {
-            _game.activePlayer().addWordToDictionary(_game.field().getSelectedWord(), " ");
+            _game.activePlayer().addWordToDictionary(_game.field().getSelectedWord(), "не задано");
             this.confirmMove();
             _wordDoesNotExistError.setVisible(false);
         });

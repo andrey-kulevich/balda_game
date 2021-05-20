@@ -151,6 +151,7 @@ public class StartMenuWidget extends RoundedPanel {
                     _builder.addDictionary("./dictionaries/russianYoungSlang.txt");
             } catch (FileNotFoundException ignored) { }
 
+            _builder.dictionary().setModifiableDictionary("./dictionaries/customDictionary.txt");
             _owner.runGame(_builder.initGame());
 
             setVisible(false);
