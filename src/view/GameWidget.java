@@ -139,7 +139,10 @@ public class GameWidget extends JPanel {
         _gameIsOver = new CustomMessageModal(_owner, message4);
         _gameIsOver.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         CustomActionButton confirmButton4 = new CustomActionButton("В МЕНЮ");
-        confirmButton4.addActionListener(e -> _owner.toStartMenu());
+        confirmButton4.addActionListener(e -> {
+            _owner.toStartMenu();
+            _gameIsOver.setVisible(false);
+        });
         _gameIsOver.addButton(confirmButton4);
 
         JLabel message5 = new JLabel("Вы уверены, что хотите пропустить ход?");
