@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 
 /** Actor in game, does main actions in game loop */
@@ -83,11 +84,47 @@ public class Player {
     public boolean writeToSelectedCell(Character letter) { return _game.field().writeToSelectedCell(letter); }
 
     /** Undo all actions committed in current move */
-    public void undoCurrentActions() { _game.field().clearSelections(); }
+    public void undoCurrentActions() {
+        _game.field().clearSelections();
+        this.fireCurrentActionsUndone();
+    }
 
     /** Skip current move */
-    public void skipMove() { _game.skipMove(); }
+    public void skipMove() {
+        _game.skipMove();
+        this.fireMoveSkipped();
+    }
 
     /** Confirm move */
-    public Game.WordCheckStatus confirmMove() { return _game.confirmMove(); }
+    public void confirmMove() {
+        Game.WordCheckStatus status = _game.confirmMove();
+        this.fireMoveConfirmed(status);
+    }
+
+
+    // --------------------- Player's listeners -------------------------
+    private final HashSet<PlayerListener> _listeners = new HashSet<>();
+
+    /** Add action listener
+     *
+     * @param listener action listener
+     */
+    public void addListener(PlayerListener listener) { _listeners.add(listener); }
+
+    /** Remove action listener
+     *
+     * @param listener action listener
+     */
+    public boolean removeListener(PlayerListener listener) { return _listeners.remove(listener); }
+
+    /** Remove all action listeners */
+    public void removeAllListeners() { _listeners.clear(); }
+
+    public void fireMoveConfirmed(Game.WordCheckStatus status) {
+        _listeners.forEach(listener -> listener.moveConfirmed(status));
+    }
+
+    public void fireMoveSkipped() { _listeners.forEach(PlayerListener::moveSkipped); }
+
+    public void fireCurrentActionsUndone() { _listeners.forEach(PlayerListener::currentActionsUndone); }
 }

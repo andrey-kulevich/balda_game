@@ -75,6 +75,8 @@ public class MainWindow extends JFrame {
      * @param game game model
      */
     public void runGame(Game game) {
+        game.firstPlayer().addListener(_gameWidget);
+        game.secondPlayer().addListener(_gameWidget);
         _gameWidget.setGame(Objects.requireNonNull(game));
         _gameWidget.setVisible(true);
     }

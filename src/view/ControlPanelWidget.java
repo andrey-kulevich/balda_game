@@ -28,8 +28,8 @@ public class ControlPanelWidget extends RoundedPanel {
         CustomActionButton confirmButton = new CustomActionButton("ПОДТВЕРДИТЬ");
 
         skipButton.addActionListener(e -> _owner.skipMove());
-        cancelButton.addActionListener(e -> _owner.undoCurrentActions());
-        confirmButton.addActionListener(e -> _owner.confirmMove());
+        cancelButton.addActionListener(e -> _owner.getGame().activePlayer().undoCurrentActions());
+        confirmButton.addActionListener(e -> _owner.getGame().activePlayer().confirmMove());
 
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
