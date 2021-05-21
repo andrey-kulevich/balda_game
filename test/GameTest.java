@@ -24,7 +24,7 @@ public class GameTest {
     void skipMove() {
         Dictionary dict = new Dictionary();
         try {
-            dict.load("./dictionaries/customDictionary.txt");
+            dict.load("./dictionaries/russianNounsWithDefinition.txt");
         } catch (FileNotFoundException ignored) {}
 
         Game game = new Game(6, dict, new Player("bla"), new Player("blo"));
@@ -36,7 +36,7 @@ public class GameTest {
     void confirmMoveCurrentLetterIsNotSelected() {
         Dictionary dict = new Dictionary();
         try {
-            dict.load("./dictionaries/customDictionary.txt");
+            dict.load("./dictionaries/russianNounsWithDefinition.txt");
         } catch (FileNotFoundException ignored) {}
 
         Game game = new Game(6, dict, new Player("bla"), new Player("blo"));
