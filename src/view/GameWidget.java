@@ -2,6 +2,7 @@ package view;
 
 
 import model.Game;
+import model.PlayerListener;
 import view.helpers.CustomActionButton;
 import view.helpers.CustomMessageModal;
 import view.helpers.GlobalStyles;
@@ -11,7 +12,7 @@ import java.awt.*;
 import java.util.Objects;
 
 /** Panel with all main game objects */
-public class GameWidget extends JPanel {
+public class GameWidget extends JPanel implements PlayerListener {
 
     private final MainWindow _owner;
     private Game _game;
@@ -115,7 +116,7 @@ public class GameWidget extends JPanel {
         CustomActionButton confirmButton1 = new CustomActionButton("ДА");
         confirmButton1.addActionListener(e -> {
             _game.activePlayer().addWordToDictionary(_game.field().getSelectedWord(), "не задано");
-            this.confirmMove();
+            _game.activePlayer().confirmMove();
             _wordDoesNotExistError.setVisible(false);
         });
         _wordDoesNotExistError.addButton(confirmButton1);
@@ -160,9 +161,6 @@ public class GameWidget extends JPanel {
         CustomActionButton confirmButton5 = new CustomActionButton("ДА");
         confirmButton5.addActionListener(e -> {
             _game.activePlayer().skipMove();
-            _firstPlayer.update();
-            _secondPlayer.update();
-            _field.update();
             _skipMoveWarning.setVisible(false);
         });
         _skipMoveWarning.addButton(confirmButton5);
@@ -203,9 +201,18 @@ public class GameWidget extends JPanel {
         setVisible(true);
     }
 
-    /** Confirm move and update all widgets on change of move */
-    public void confirmMove() {
-        switch (_game.activePlayer().confirmMove()) {
+    /** Skip move and change active player */
+    public void skipMove() { _skipMoveWarning.setVisible(true); }
+
+    /** Add new selected letter to the help panel
+     *
+     * @param letter selected letter
+     */
+    public void extendSelectionOrder(Character letter) { _selectionOrder.addLetter(letter); }
+
+    @Override
+    public void moveConfirmed(Game.WordCheckStatus status) {
+        switch (status) {
             case SUCCESS -> {
                 _firstPlayer.update();
                 _secondPlayer.update();
@@ -219,22 +226,17 @@ public class GameWidget extends JPanel {
         }
     }
 
-    /** Undo actions committed in current move */
-    public void undoCurrentActions() {
-        _game.activePlayer().undoCurrentActions();
+    @Override
+    public void currentActionsUndone() {
         _field.update();
         _selectionOrder.clear();
     }
 
-    /** Skip move and change active player */
-    public void skipMove() {
-        _skipMoveWarning.setVisible(true);
+    @Override
+    public void moveSkipped() {
+        _firstPlayer.update();
+        _secondPlayer.update();
+        _field.update();
         _selectionOrder.clear();
     }
-
-    /** Add new selected letter to the help panel
-     *
-     * @param letter selected letter
-     */
-    public void extendSelectionOrder(Character letter) { _selectionOrder.addLetter(letter); }
 }
