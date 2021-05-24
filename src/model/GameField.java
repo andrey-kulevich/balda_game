@@ -15,10 +15,7 @@ public class GameField {
      * @param startWord start word on the field
      */
     public GameField(String startWord) {
-        if (!startWord.matches("[а-яёА-ЯЁ]{5,}")) {
-            throw new IllegalArgumentException("Start word must have longer than 4 " +
-                    "letters and contain only cyrillic letters");
-        }
+        if (startWord.length() < 5) throw new IllegalArgumentException("Start word must have at least 5 letters");
 
         _cells = new Cell[startWord.length()][startWord.length()];
         for (int i = 0; i < startWord.length(); i++) {

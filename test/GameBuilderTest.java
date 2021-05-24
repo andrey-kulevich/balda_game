@@ -18,12 +18,12 @@ public class GameBuilderTest {
         _builder.setFirstPlayer(new Player("Вася"));
         _builder.setSecondPlayer(new Player("Жора"));
         try {
-            _builder.addDictionary("./dictionaries/customDictionary.txt");
+            _builder.addDictionary("./dictionaries/russianNounsWithDefinition.txt");
         } catch (FileNotFoundException ignored) { }
         Game game = _builder.initGame();
         Assertions.assertTrue(game.firstPlayer().name().equals("Вася")
                 && game.secondPlayer().name().equals("Жора")
-                && game.field() != null && game.dictionary().hasWord("чикипуки"));
+                && game.field() != null && game.dictionary().hasWord("жизнь"));
     }
 
     @Test

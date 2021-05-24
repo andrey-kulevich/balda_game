@@ -81,7 +81,10 @@ public class Player {
      * @param letter Unicode letter
      * @return success
      */
-    public boolean writeToSelectedCell(Character letter) { return _game.field().writeToSelectedCell(letter); }
+    public boolean writeToSelectedCell(Character letter) {
+        if (!_game.dictionary().isLetterValid(letter)) return false;
+        return _game.field().writeToSelectedCell(letter);
+    }
 
     /** Undo all actions committed in current move */
     public void undoCurrentActions() {

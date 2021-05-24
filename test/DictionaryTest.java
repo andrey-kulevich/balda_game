@@ -39,18 +39,18 @@ public class DictionaryTest {
     void getDefinitionOfWord() {
         cleanUp();
         try {
-            _dict.load("./dictionaries/customDictionary.txt");
+            _dict.load("./dictionaries/russianNounsWithDefinition.txt");
         } catch (FileNotFoundException ignored) { }
-        Assertions.assertEquals("блабла", _dict.getDefinition("чикипуки"));
+        Assertions.assertEquals(" м. Тот, кто производит крепежные работы.", _dict.getDefinition("крепильщик"));
     }
 
     @Test
     void checkIfSuchWordIsExist() {
         cleanUp();
         try {
-            _dict.load("./dictionaries/customDictionary.txt");
+            _dict.load("./dictionaries/russianNounsWithDefinition.txt");
         } catch (FileNotFoundException ignored) { }
-        Assertions.assertTrue(_dict.hasWord("чикипуки"));
+        Assertions.assertTrue(_dict.hasWord("жизнь"));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class DictionaryTest {
     void getRandomWord() {
         cleanUp();
         try {
-            _dict.load("./dictionaries/customDictionary.txt");
+            _dict.load("./dictionaries/russianNounsWithDefinition.txt");
         } catch (FileNotFoundException ignored) { }
         Assertions.assertTrue(_dict.getRandomWord(6) != null
                 && _dict.getRandomWord(6).length() == 6);
@@ -102,7 +102,7 @@ public class DictionaryTest {
             _dict.saveAddedWords();
             newDict.load("./dictionaries/customDictionary.txt");
         } catch (RuntimeException | IOException ignored) { }
-        Assertions.assertEquals("привееет", newDict.getDefinition("хобаа"));
+        Assertions.assertEquals(" привееет", newDict.getDefinition("хобаа"));
     }
 
     @Test

@@ -15,6 +15,8 @@ public class Dictionary {
     private final HashMap<String,String> _addedWords = new HashMap<>();
     /** path to modifiable file, where added words will be saved */
     private String _modifiableDictionary = null;
+    /** regex to check correctness of letters */
+    private String _alphabetRegex = "[а-яёА-ЯЁ]";
 
     /** Add words to dictionary from txt file
      *
@@ -40,12 +42,29 @@ public class Dictionary {
         _modifiableDictionary = Objects.requireNonNull(filename);
     }
 
+    /** Set regex to check correctness of letters
+     *
+     * @param regex regex
+     */
+    public void setAlphabetRegex(String regex) { _alphabetRegex = Objects.requireNonNull(regex); }
+
+    /** Check correctness of letters
+     *
+     * @param letter letter
+     * @return correctness
+     */
+    public boolean isLetterValid(Character letter) { return letter.toString().matches(_alphabetRegex); }
+
     /** Get short definition of the word
      *
      * @param word word
      * @return definition
      */
-    public String getDefinition(String word) { return _words.get(word); }
+    public String getDefinition(String word) {
+        String definition = _words.get(word);
+        if (definition == null) return _addedWords.get(word);
+        else return definition;
+    }
 
     /** Check word in dictionary
      *
