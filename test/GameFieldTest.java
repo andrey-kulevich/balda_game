@@ -11,11 +11,6 @@ public class GameFieldTest {
     }
 
     @Test
-    void startWordContainsNoneCyrillicSymbols() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new GameField("helббг"));
-    }
-
-    @Test
     void selectCellToWriteLetter() {
         GameField field = new GameField("приветь");
         boolean success = field.selectCell(2, 1);
