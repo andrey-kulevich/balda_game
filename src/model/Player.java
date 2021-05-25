@@ -12,7 +12,7 @@ public class Player {
     /** word that had discovered by player earlier */
     private final ArrayList<String> _composedWords = new ArrayList<>();
     /** current state of player */
-    private boolean _isActive = false;
+    protected boolean _isActive = false;
     /** game */
     private Game _game;
 
