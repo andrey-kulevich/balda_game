@@ -14,7 +14,7 @@ public class Player {
     /** current state of player */
     protected boolean _isActive = false;
     /** game */
-    private Game _game;
+    protected Game _game;
 
     /** Constructor
      *
