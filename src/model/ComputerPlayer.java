@@ -18,7 +18,7 @@ public class ComputerPlayer extends Player {
      */
     public ComputerPlayer(String name, Intellect intellect) {
         super(name);
-        _sequencesDepth = intellect.ordinal() + 3;
+        _sequencesDepth = intellect.ordinal() + 4;
     }
 
     @Override
@@ -65,6 +65,7 @@ public class ComputerPlayer extends Player {
         for (int i = 0; i < field.size(); i++) {
             for (int j = 0; j < field.size(); j++) {
                 ArrayList<ArrayList<CellObj>> currSequences = new ArrayList<>();
+                currSequences.add((ArrayList<CellObj>) Collections.singletonList(new CellObj(field.getCell(i, j).letter(), i, j)));
                 for (int k = 0; k < _sequencesDepth; k++) {
                     ArrayList<ArrayList<CellObj>> tempSequences = new ArrayList<>();
                     for (ArrayList<CellObj> currSequence : currSequences) {
