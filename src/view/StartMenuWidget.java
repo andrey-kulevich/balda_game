@@ -1,11 +1,13 @@
 package view;
 
+import model.ComputerPlayer;
 import model.GameBuilder;
 import model.Player;
 import view.helpers.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
 import java.io.FileNotFoundException;
 import java.util.Objects;
 
@@ -14,8 +16,11 @@ public class StartMenuWidget extends RoundedPanel {
 
     private final MainWindow _owner;
     private final GameBuilder _builder = new GameBuilder();
-    private final JTextField _firstPlayerName = new CustomTextField();
-    private final JTextField _secondPlayerName = new CustomTextField();
+    private final JTextField _firstPlayerNameField = new CustomTextField();
+    private final JTextField _secondPlayerNameField = new CustomTextField();
+    private final JLabel _secondPlayerName = new JLabel("Второй игрок");
+    private final JLabel _difficultyLevel = new JLabel("Уровень сложности");
+    private final JComboBox<String> _difficultiesSelect = new JComboBox<>(new String[]{"Легкий", "Средний", "Сложный"});
     private final JComboBox<String> _fieldSizeSelect = new JComboBox<>(new String[]{"5x5", "6x6", "7x7", "8x8", "9x9"});
     private final JCheckBox _jargonDictionary = new JCheckBox("Жаргонные слова");
     private final JCheckBox _russianTownsDictionary = new JCheckBox("Города России");
@@ -23,6 +28,7 @@ public class StartMenuWidget extends RoundedPanel {
     private final CustomMessageModal _emptyNamesError;
     private final CustomMessageModal _longNamesError;
     private final CustomMessageModal _equalNamesError;
+    private final JCheckBox _isComputerPlayer = new JCheckBox("компьютерный игрок");
 
     /** Constructor
      *
@@ -74,30 +80,62 @@ public class StartMenuWidget extends RoundedPanel {
 
         constraints.gridwidth = 1;
         constraints.gridy = 1;
-        JLabel firstPlayerName = new JLabel("Имя первого игрока");
+        JLabel firstPlayerName = new JLabel("Первый игрок");
         firstPlayerName.setFont(GlobalStyles.HEADER_FONT);
         add(firstPlayerName, constraints);
+
         constraints.gridx = 1;
-        JLabel secondPlayerName = new JLabel("Имя второго игрока");
-        secondPlayerName.setFont(GlobalStyles.HEADER_FONT);
-        add(secondPlayerName, constraints);
+        add(_firstPlayerNameField, constraints);
 
         constraints.gridy = 2;
         constraints.gridx = 0;
-        add(_firstPlayerName, constraints);
-        constraints.gridx = 1;
+        _secondPlayerName.setFont(GlobalStyles.HEADER_FONT);
         add(_secondPlayerName, constraints);
 
-        // combobox
-        constraints.gridy = 3;
+        constraints.gridx = 1;
+        add(_secondPlayerNameField, constraints);
+
+        constraints.gridy = 2;
         constraints.gridx = 0;
+        _difficultyLevel.setFont(GlobalStyles.HEADER_FONT);
+        _difficultyLevel.setVisible(false);
+        add(_difficultyLevel, constraints);
+
+        constraints.gridx = 1;
+        _difficultiesSelect.setVisible(false);
+        _difficultiesSelect.setFont(GlobalStyles.MAIN_FONT);
+        _difficultiesSelect.setBackground(GlobalStyles.PRIMARY_COLOR);
+        add(_difficultiesSelect, constraints);
+
+        constraints.gridx = 0;
+        _isComputerPlayer.setFont(GlobalStyles.MAIN_FONT);
+        _isComputerPlayer.setBackground(GlobalStyles.SECONDARY_COLOR);
+        _isComputerPlayer.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                _difficultiesSelect.setVisible(true);
+                _secondPlayerNameField.setVisible(false);
+                _difficultyLevel.setVisible(true);
+                _secondPlayerName.setVisible(false);
+            } else {
+                _difficultiesSelect.setVisible(false);
+                _secondPlayerNameField.setVisible(true);
+                _difficultyLevel.setVisible(false);
+                _secondPlayerName.setVisible(true);
+            }
+        });
+        constraints.gridy = 3;
+        add(_isComputerPlayer, constraints);
+
+        // combobox
+        constraints.gridy = 4;
         JLabel fieldSizeLabel = new JLabel("Размер поля");
         fieldSizeLabel.setFont(GlobalStyles.HEADER_FONT);
         add(fieldSizeLabel, constraints);
-        constraints.gridy = 4;
+        constraints.gridx = 1;
         _fieldSizeSelect.setFont(GlobalStyles.MAIN_FONT);
         _fieldSizeSelect.setBackground(GlobalStyles.PRIMARY_COLOR);
         add(_fieldSizeSelect, constraints);
+        constraints.gridx = 0;
 
         // additional dictionaries
         JLabel additionalDictionariesLabel = new JLabel("Доп. словари");
@@ -133,9 +171,9 @@ public class StartMenuWidget extends RoundedPanel {
 
     /** Generate the new game with specified settings */
     private void onClickStart() {
-        String first = _firstPlayerName.getText();
-        String second = _secondPlayerName.getText();
-        if (second.isEmpty() || first.isEmpty()) {
+        String first = _firstPlayerNameField.getText();
+        String second = _secondPlayerNameField.getText();
+        if ((second.isEmpty() && !_isComputerPlayer.isSelected()) || first.isEmpty()) {
             _emptyNamesError.setVisible(true);
         } else if (first.length() > 20 || second.length() > 20) {
             _longNamesError.setVisible(true);
@@ -143,7 +181,18 @@ public class StartMenuWidget extends RoundedPanel {
             _equalNamesError.setVisible(true);
         } else {
             _builder.setFirstPlayer(new Player(first));
-            _builder.setSecondPlayer(new Player(second));
+            if (_isComputerPlayer.isSelected()) {
+                ComputerPlayer.Intellect intellect;
+                switch(Objects.requireNonNull(_difficultiesSelect.getSelectedItem()).toString()) {
+                    case "Легкий" -> intellect = ComputerPlayer.Intellect.EASY;
+                    case "Средний" -> intellect = ComputerPlayer.Intellect.MEDIUM;
+                    case "Сложный" -> intellect = ComputerPlayer.Intellect.HARD;
+                    default -> throw new IllegalStateException("Unexpected value");
+                }
+                _builder.setSecondPlayer(new ComputerPlayer("Компьютер", intellect));
+            } else {
+                _builder.setSecondPlayer(new Player(second));
+            }
             _builder.setFieldSize(Character.getNumericValue(
                     Objects.requireNonNull(_fieldSizeSelect.getSelectedItem()).toString().charAt(0)));
             try {

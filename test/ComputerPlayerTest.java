@@ -283,9 +283,7 @@ public class ComputerPlayerTest {
 
         Game game = new Game(5, dict, new Player("player"),
                 new ComputerPlayerForTests("computer", ComputerPlayerForTests.Intellect.MEDIUM));
-
         game.firstPlayer().skipMove();
-
         Assertions.assertEquals(1, game.secondPlayer().getWords().size());
     }
 }

@@ -133,9 +133,13 @@ public class ComputerPlayer extends Player {
                 int spaceIndex = resultSequence.indexOf(targetCell.get());
                 for (Character letter : alphabet) {
                     resultSequence.get(spaceIndex).letter = letter;
-                    StringBuilder word = new StringBuilder();
-                    for (CellObj cellObj : resultSequence) word.append(Character.toLowerCase(cellObj.letter));
-                    if (_game.dictionary().hasWord(word.toString())) {
+                    StringBuilder wordBuilder = new StringBuilder();
+                    for (CellObj cellObj : resultSequence) wordBuilder.append(Character.toLowerCase(cellObj.letter));
+                    String word = wordBuilder.toString();
+                    if (_game.dictionary().hasWord(word) &&
+                            !_game.field().getStartWord().equals(word) &&
+                            !_game.firstPlayer().getWords().contains(word) &&
+                            !getWords().contains(word)) {
                         outSequences.add(resultSequence);
                         break;
                     }
