@@ -9,7 +9,7 @@ public class ComputerPlayer extends Player {
     public enum Intellect { EASY, MEDIUM, HARD }
 
     /** interpretation of intellect level as max length of words to search */
-    private final int _sequencesDepth;
+    protected final Intellect _intellect;
 
     /** Create computer player with selected intellect level
      *
@@ -18,7 +18,7 @@ public class ComputerPlayer extends Player {
      */
     public ComputerPlayer(String name, Intellect intellect) {
         super(name);
-        _sequencesDepth = intellect.ordinal() + 4;
+        _intellect = intellect;
     }
 
     @Override
@@ -28,29 +28,18 @@ public class ComputerPlayer extends Player {
     }
 
     /** Do automatic move */
-    private void doMove() {
-
-        GameField field = _game.field();
+    protected void doMove() {
         ArrayList<ArrayList<CellObj>> sequences = new ArrayList<>();
 
-        this.searchSequences(sequences);
-        this.filterSequences(sequences);
+        this.searchSequences(sequences, _intellect.ordinal() + 4);
+        filterSequences(sequences);
 
         ArrayList<ArrayList<CellObj>> resultSequences = new ArrayList<>();
         this.findWordsInDictionary(sequences, resultSequences);
 
-        // find the largest sequence and do move
-        Optional<ArrayList<CellObj>> max =  resultSequences.stream().max(Comparator.comparing(List::size));
-        if (max.isPresent()) {
-            ArrayList<CellObj> result =  max.get();
-            for (CellObj cellObj : result) {
-                if (!field.getCell(cellObj.row, cellObj.col).hasLetter()) {
-                    selectCell(cellObj.row, cellObj.col);
-                    writeToSelectedCell(cellObj.letter);
-                    break;
-                }
-            }
-            for (CellObj cellObj : result) { selectCell(cellObj.row, cellObj.col); }
+        if (!resultSequences.isEmpty()) {
+            this.selectSequenceOnField(getLongestSequence(resultSequences));
+            confirmMove();
         } else {
             skipMove();
         }
@@ -60,13 +49,19 @@ public class ComputerPlayer extends Player {
      *
      * @param sequences list of all possible sequences
      */
-    private void searchSequences(ArrayList<ArrayList<CellObj>> sequences) {
+    protected void searchSequences(ArrayList<ArrayList<CellObj>> sequences, int maxLength) {
         GameField field = _game.field();
+
+        if (maxLength > field.size()*field.size())
+            throw new IllegalArgumentException("Max length cannot be longer than amount of cells on field");
+
         for (int i = 0; i < field.size(); i++) {
             for (int j = 0; j < field.size(); j++) {
                 ArrayList<ArrayList<CellObj>> currSequences = new ArrayList<>();
-                currSequences.add((ArrayList<CellObj>) Collections.singletonList(new CellObj(field.getCell(i, j).letter(), i, j)));
-                for (int k = 0; k < _sequencesDepth; k++) {
+                ArrayList<CellObj> firstCell = new ArrayList<>();
+                firstCell.add(new CellObj(field.getCell(i, j).letter(), i, j));
+                currSequences.add(firstCell);
+                for (int k = 0; k < maxLength - 1; k++) {
                     ArrayList<ArrayList<CellObj>> tempSequences = new ArrayList<>();
                     for (ArrayList<CellObj> currSequence : currSequences) {
                         CellObj cellObj = currSequence.get(currSequence.size() - 1);
@@ -108,21 +103,18 @@ public class ComputerPlayer extends Player {
      *
      * @param sequences sequences to filter
      */
-    private void filterSequences(ArrayList<ArrayList<CellObj>> sequences) {
+    protected void filterSequences(ArrayList<ArrayList<CellObj>> sequences) {
         for (Iterator<ArrayList<CellObj>> iterator = sequences.iterator(); iterator.hasNext(); ) {
             int emptyCellsCount = 0;
             boolean isRepetition = false;
             ArrayList<CellObj> currSequence = iterator.next();
+            ArrayList<CellObj> withoutDuplicates = new ArrayList<>();
             for (CellObj cell : currSequence) {
                 if (cell.letter == ' ') emptyCellsCount++;
-                for (CellObj other : currSequence) {
-                    if (cell == other) {
-                        isRepetition = true;
-                        break;
-                    }
-                }
+                if (!withoutDuplicates.contains(cell)) withoutDuplicates.add(cell);
             }
-            if (emptyCellsCount > 1 || emptyCellsCount == 0 || isRepetition) iterator.remove();
+            if (currSequence.size() != withoutDuplicates.size()) isRepetition = true;
+            if (currSequence.size() < 2 || emptyCellsCount > 1 || emptyCellsCount == 0 || isRepetition) iterator.remove();
         }
     }
 
@@ -131,7 +123,7 @@ public class ComputerPlayer extends Player {
      * @param inSequences original sequences
      * @param outSequences sequences with added letter and found word
      */
-    private void findWordsInDictionary(ArrayList<ArrayList<CellObj>> inSequences, ArrayList<ArrayList<CellObj>> outSequences) {
+    protected void findWordsInDictionary(ArrayList<ArrayList<CellObj>> inSequences, ArrayList<ArrayList<CellObj>> outSequences) {
         ArrayList<Character> alphabet = _game.dictionary().getAlphabet();
 
         for (ArrayList<CellObj> sequence : inSequences) {
@@ -142,12 +134,8 @@ public class ComputerPlayer extends Player {
                 for (Character letter : alphabet) {
                     resultSequence.get(spaceIndex).letter = letter;
                     StringBuilder word = new StringBuilder();
-                    for (CellObj cellObj : resultSequence) word.append(cellObj.letter);
+                    for (CellObj cellObj : resultSequence) word.append(Character.toLowerCase(cellObj.letter));
                     if (_game.dictionary().hasWord(word.toString())) {
-                        outSequences.add(resultSequence);
-                        break;
-                    } else if (_game.dictionary().hasWord(word.reverse().toString())) {
-                        Collections.reverse(resultSequence);
                         outSequences.add(resultSequence);
                         break;
                     }
@@ -156,13 +144,51 @@ public class ComputerPlayer extends Player {
         }
     }
 
-    /** Supporting class that represents the model cell with exact position */
-    private static class CellObj {
-        Character letter;
-        final int row;
-        final int col;
+    /** Get longest sequence from list
+     *
+     * @param sequences list of sequences
+     * @return longest sequence
+     */
+    protected ArrayList<CellObj> getLongestSequence(ArrayList<ArrayList<CellObj>> sequences) {
+        if (sequences.isEmpty()) throw new IllegalArgumentException("No sequences in list");
+        return sequences.stream().max(Comparator.comparing(List::size)).get();
+    }
 
-        CellObj(Character letter, int row, int col) {
+    /** Get random sequence from list
+     *
+     * @param sequences list of sequences
+     * @return random sequence
+     */
+    protected ArrayList<CellObj> getRandomSequence(ArrayList<ArrayList<CellObj>> sequences) {
+        return sequences.get(new Random().nextInt(sequences.size()));
+    }
+
+    /** Write letter to specified cell and select word
+     *
+     * @param sequence word to select
+     */
+    protected void selectSequenceOnField(ArrayList<CellObj> sequence) {
+        for (CellObj cellObj : sequence) {
+            if (!_game.field().getCell(cellObj.row, cellObj.col).hasLetter()) {
+                if (!selectCell(cellObj.row, cellObj.col))
+                    throw new RuntimeException("Unable to select sequence on field");
+                writeToSelectedCell(cellObj.letter);
+                break;
+            }
+        }
+        for (CellObj cellObj : sequence) {
+            if (!selectCell(cellObj.row, cellObj.col))
+                throw new RuntimeException("Unable to select sequence on field");
+        }
+    }
+
+    /** Supporting struct that represents the model cell with exact position */
+    public static class CellObj {
+        public Character letter;
+        public final int row;
+        public final int col;
+
+        public CellObj(Character letter, int row, int col) {
             this.letter = letter;
             this.row = row;
             this.col = col;
