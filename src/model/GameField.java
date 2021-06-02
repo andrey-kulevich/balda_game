@@ -9,6 +9,8 @@ public class GameField {
     private final Cell[][] _cells;
     /** last selected cell */
     private int _currentSelectionIndex = -1;
+    /** start word on this field */
+    private final String _startWord;
 
     /** Constructor
      *
@@ -16,6 +18,7 @@ public class GameField {
      */
     public GameField(String startWord) {
         if (startWord.length() < 5) throw new IllegalArgumentException("Start word must have at least 5 letters");
+        _startWord = startWord;
 
         _cells = new Cell[startWord.length()][startWord.length()];
         for (int i = 0; i < startWord.length(); i++) {
@@ -37,6 +40,12 @@ public class GameField {
      * @return field size
      */
     public int size() { return _cells.length; }
+
+    /** Get start word
+     *
+     * @return start word
+     */
+    public String getStartWord() { return _startWord; }
 
     /** Get current selection index
      *
