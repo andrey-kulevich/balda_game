@@ -15,8 +15,13 @@ public class Dictionary {
     private final HashMap<String,String> _addedWords = new HashMap<>();
     /** path to modifiable file, where added words will be saved */
     private String _modifiableDictionary = null;
-    /** regex to check correctness of letters */
-    private String _alphabetRegex = "[а-яёА-ЯЁ]";
+    /** alphabet of allowed letters */
+    private ArrayList<Character> _alphabet = new ArrayList<>(Arrays.asList(
+            'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё',
+            'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М',
+            'Н', 'О', 'П', 'Р', 'С', 'Т', 'У',
+            'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ',
+            'Ы', 'Ь', 'Э', 'Ю', 'Я'));
 
     /** Add words to dictionary from txt file
      *
@@ -42,18 +47,24 @@ public class Dictionary {
         _modifiableDictionary = Objects.requireNonNull(filename);
     }
 
-    /** Set regex to check correctness of letters
+    /** Set alphabet of allowed letters
      *
-     * @param regex regex
+     * @param alphabet list of letters
      */
-    public void setAlphabetRegex(String regex) { _alphabetRegex = Objects.requireNonNull(regex); }
+    public void setAlphabetRegex(ArrayList<Character> alphabet) { _alphabet = Objects.requireNonNull(alphabet); }
 
     /** Check correctness of letters
      *
      * @param letter letter
      * @return correctness
      */
-    public boolean isLetterValid(Character letter) { return letter.toString().matches(_alphabetRegex); }
+    public boolean isLetterValid(Character letter) { return _alphabet.contains(Character.toUpperCase(letter)); }
+
+    /** Get alphabet
+     *
+     * @return list of letters
+     */
+    public ArrayList<Character> getAlphabet() { return new ArrayList<>(_alphabet); }
 
     /** Get short definition of the word
      *
