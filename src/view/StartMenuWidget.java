@@ -1,5 +1,6 @@
 package view;
 
+import model.AdvancedComputerPlayer;
 import model.ComputerPlayer;
 import model.GameBuilder;
 import model.Player;
@@ -20,7 +21,8 @@ public class StartMenuWidget extends RoundedPanel {
     private final JTextField _secondPlayerNameField = new CustomTextField();
     private final JLabel _secondPlayerName = new JLabel("Второй игрок");
     private final JLabel _difficultyLevel = new JLabel("Уровень сложности");
-    private final JComboBox<String> _difficultiesSelect = new JComboBox<>(new String[]{"Легкий", "Средний", "Сложный"});
+    private final JComboBox<String> _difficultiesSelect = new JComboBox<>(
+            new String[]{"Легкий", "Средний", "Сложный", "Возрастающая сложность"});
     private final JComboBox<String> _fieldSizeSelect = new JComboBox<>(new String[]{"5x5", "6x6", "7x7", "8x8", "9x9"});
     private final JCheckBox _jargonDictionary = new JCheckBox("Жаргонные слова");
     private final JCheckBox _russianTownsDictionary = new JCheckBox("Города России");
@@ -183,13 +185,17 @@ public class StartMenuWidget extends RoundedPanel {
             _builder.setFirstPlayer(new Player(first));
             if (_isComputerPlayer.isSelected()) {
                 ComputerPlayer.Intellect intellect;
-                switch(Objects.requireNonNull(_difficultiesSelect.getSelectedItem()).toString()) {
+                String difficulty = Objects.requireNonNull(_difficultiesSelect.getSelectedItem()).toString();
+                switch(difficulty) {
                     case "Легкий" -> intellect = ComputerPlayer.Intellect.EASY;
                     case "Средний" -> intellect = ComputerPlayer.Intellect.MEDIUM;
-                    case "Сложный" -> intellect = ComputerPlayer.Intellect.HARD;
+                    case "Сложный", "Возрастающая сложность" -> intellect = ComputerPlayer.Intellect.HARD;
                     default -> throw new IllegalStateException("Unexpected value");
                 }
-                _builder.setSecondPlayer(new ComputerPlayer("Компьютер", intellect));
+                if (difficulty.equals("Возрастающая сложность"))
+                    _builder.setSecondPlayer(new AdvancedComputerPlayer("Компьютер"));
+                else
+                    _builder.setSecondPlayer(new ComputerPlayer("Компьютер", intellect));
             } else {
                 _builder.setSecondPlayer(new Player(second));
             }
